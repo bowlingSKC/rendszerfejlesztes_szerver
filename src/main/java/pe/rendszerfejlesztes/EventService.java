@@ -7,6 +7,7 @@ import pe.rendszerfejlesztes.services.LocationServiceLocal;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
@@ -36,6 +37,15 @@ public class EventService {
         List<Event> events = eventService.getAllEvents();
         GenericEntity<List<Event>> locationWrapper = new GenericEntity<List<Event>>(events) {};
         return Response.ok(locationWrapper).build();
+    }
+
+    @POST
+    @Produces("application/json")
+    @Path("search")
+    public Response searchEvents(Event event) {
+        List<Event> events = eventService.searchEvent(event);
+        GenericEntity<List<Event>> eventsWrapper = new GenericEntity<List<Event>>(events) {};
+        return Response.ok(eventsWrapper).build();
     }
 
 }

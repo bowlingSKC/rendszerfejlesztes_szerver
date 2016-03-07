@@ -9,5 +9,6 @@ import java.util.List;
 public interface EventServiceLocal {
 
     List<Event> getAllEvents();
+    List<Event> searchEvent(Event event);
 
 }
