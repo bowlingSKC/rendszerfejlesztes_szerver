@@ -17,9 +17,7 @@ public class UserService {
     @Produces("application/json")
     public Response registerUser(User newUser) {
         User created = userService.createUser(newUser);
-
         System.out.println("Sikeres regisztracio tortent! " + created);
-
         return Response.ok(created).build();
     }
 
@@ -27,11 +25,12 @@ public class UserService {
     @Produces("application/json")
     @Path("{email}/{pswd}")
     public Response login(@PathParam("email") String email, @PathParam("pswd") String pswd) {
+        System.out.println( "Keres erkezett: bejelentkezes" );
         User user = userService.login(email, pswd);
         if( user == null ) {
-            System.out.println( "user: null" );
+            System.out.println( "A bejelentkezes nem sikerult" );
         } else {
-            System.out.println(user);
+            System.out.println("A bejelentkezes sikerult: " + user);
         }
         return Response.ok(user).build();
     }

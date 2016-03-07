@@ -26,6 +26,7 @@ public class EventService {
     @Path("locations")
     @Produces("application/json")
     public Response getAllLocations() {
+        System.out.println( "Keres erkezett: osszes helyszin lekerdezese" );
         List<Location> locations = locationService.getAllLocation();
         GenericEntity<List<Location>> locationWrapper = new GenericEntity<List<Location>>(locations) {};
         return Response.ok(locationWrapper).build();
@@ -34,6 +35,7 @@ public class EventService {
     @GET
     @Produces("application/json")
     public Response getAllEvents() {
+        System.out.println( "Keres erkezett: osszes esemeny lekerdezese" );
         List<Event> events = eventService.getAllEvents();
         GenericEntity<List<Event>> locationWrapper = new GenericEntity<List<Event>>(events) {};
         return Response.ok(locationWrapper).build();
@@ -43,6 +45,7 @@ public class EventService {
     @Produces("application/json")
     @Path("search")
     public Response searchEvents(Event event) {
+        System.out.println( "Keres erkezett: esemenyek keresese, keresesi feltetel: " + event );
         List<Event> events = eventService.searchEvent(event);
         GenericEntity<List<Event>> eventsWrapper = new GenericEntity<List<Event>>(events) {};
         return Response.ok(eventsWrapper).build();
