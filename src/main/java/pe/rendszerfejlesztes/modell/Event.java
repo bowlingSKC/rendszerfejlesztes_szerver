@@ -7,53 +7,96 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
+/**
+ * Egy eseményt leíró osztály.
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "event")
 public class Event {
 
+    /**
+     * Az eseményhez tartozó elsődleges kulcs az adatbázisban.
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
+    /**
+     * Az esemény neve.
+     * Nem vehet fel null értéket adatbázisba való beszúrás előtt.
+     */
     @Basic(optional = false)
     @NotNull
     @Column(name = "name")
     private String name;
 
+    /**
+     * Az esemény kezdési időpontja.
+     * Nem vehet fel null értéket adatbázisba való beszúrás előtt.
+     */
     @Basic(optional = false)
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "start")
     private Date start;
 
+    /**
+     * Az esemény hossza percben.
+     * Nem vehet fel null értéket adatbázisba való beszúrás előtt.
+     */
     @Basic(optional = false)
     @NotNull
     @Column(name = "duration")
     private Integer duration;
 
+    /**
+     * Az eseményhez tartozó leírás.
+     */
     @Basic(optional = false)
     @Column(name = "description")
     private String description;
 
+    /**
+     * Az eseményhez tartozó ár.
+     * Nem vehet fel null értéket adatbázisba való beszúrás előtt.
+     */
     @Basic(optional = false)
     @NotNull
     @Column(name = "price")
     private Integer price;
 
+    /**
+     * Az eseményhez tarzozó helyszín.
+     */
     @JoinColumn(name = "location_id", referencedColumnName = "id")
     @ManyToOne
     private Location location;
 
+    /**
+     * Az eseményhez tartozó előadó.
+     */
     @JoinColumn(name = "performer_id", referencedColumnName = "id")
     @ManyToOne
     private Performer performer;
 
+    /**
+     * Paraméter nélküli konstruktor.
+     * Semmilyen értéket nem állít be az adattagoknak.
+     */
     public Event() {
     }
 
+    /**
+     * Konstruktor.
+     * @param name az esemény neve
+     * @param start az esemény kezdési időpontja
+     * @param duration az esemény hossza percben
+     * @param description az eseményhez tartozó leírás
+     * @param price az eseményhez tartozó ár
+     */
     public Event(String name, Date start, Integer duration, String description, Integer price) {
         this.name = name;
         this.start = start;

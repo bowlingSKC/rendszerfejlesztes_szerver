@@ -9,12 +9,29 @@ import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A {@link pe.rendszerfejlesztes.services.EventServiceLocal} egy implementált osztálya relációs adatbázisok perzisztens rétegének megvalósításához.
+ * Az osztály egyben egy állapot nélküli EJB is.
+ * @see pe.rendszerfejlesztes.modell.Event
+ */
 @Stateless
 public class EventService implements EventServiceLocal {
 
+    /**
+     * Adatbázist megvalósító osztály.
+     * Ezen adattagon kereszül kell az adatbázis-műveleteket megvalósítani.
+     * <p>
+     *     A PersistenceContex annotáció unitName mezőjének az értéke a persistence.xml fájlban van definiálva.
+     * </p>
+     */
     @PersistenceContext(unitName = "serverUnit")
     EntityManager em;
 
+    /**
+     * Adatbázisból lekérdezi az összes eseményt.
+     * Ha nincs egy esemény se, akkor üres listával tér vissza.
+     * @return az események listája
+     */
     @Override
     public List<Event> getAllEvents() {
         Query query = em.createQuery("SELECT event FROM Event event");
@@ -25,6 +42,12 @@ public class EventService implements EventServiceLocal {
         return events;
     }
 
+    /**
+     * Keresés az események között a megadott szempontok szerint.
+     * Ha egy eseményt se talál, akkor üres listával tér vissza.
+     * @param event a keresési paraméter
+     * @return a keresési feltételeknek megfelelő események listája
+     */
     @Override
     public List<Event> searchEvent(Event event) {
         StringBuilder builder = new StringBuilder("SELECT event FROM Event event ");

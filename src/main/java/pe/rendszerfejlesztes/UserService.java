@@ -7,12 +7,31 @@ import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
+/**
+ * A felhasználók kezelésére szolgáló végpont.
+ * <p>
+ *     Elérése: /api/user
+ * </p>
+ */
 @Path("user")
 public class UserService {
 
+    /**
+     * A felhasználók kezelését szolgáló EJB.
+     * @see pe.rendszerfejlesztes.services.UserServiceLocal
+     */
     @EJB
     private UserServiceLocal userService;
 
+    /**
+     * Új regisztráció elmentése adatbázisba.
+     * Az érvényességeket klines oldalon kell ellenőrizi.
+     * <p>
+     *     Elérése PUT hívással: /api/user
+     * </p>
+     * @param newUser az új felhasználó
+     * @return a perzisztens felhasználó objektum
+     */
     @PUT
     @Produces("application/json")
     public Response registerUser(User newUser) {
@@ -21,6 +40,17 @@ public class UserService {
         return Response.ok(created).build();
     }
 
+    /**
+     * A rendszerbe való bejelentkezés ellenőrzése. Helytelen bejelentkezés esetén null értékkel tér vissza.
+     * <p>
+     *     Elérés GET hívással: /api/user/{email}/{jelszo}.
+     *     Ahol az {email} cím helyére a felhasználó által megadott E-mail címet, a {jelszo} helyére a felhasználó által
+     *     megadott jelszót kell írni.
+     * </p>
+     * @param email a felhasználó által megadott E-mail cím
+     * @param pswd a felhasználó által megadott jelszó titkosítva
+     * @return sikeres bejelentkezés esetén az E-mail címhez tartozó objektum, ellenkező esetben null
+     */
     @GET
     @Produces("application/json")
     @Path("{email}/{pswd}")

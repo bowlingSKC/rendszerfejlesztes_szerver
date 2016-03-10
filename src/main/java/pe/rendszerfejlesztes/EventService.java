@@ -14,14 +14,36 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+/**
+ * Az események és helyszínek kezelését szolgáló végpont.
+ * <p>
+ *     A végpontot a következő linek lehet elérni: /api/event
+ * </p>
+ */
 @Path("event")
 public class EventService {
 
+    /**
+     * A helyszínek kezelését szolgáló EJB.
+     * @see pe.rendszerfejlesztes.services.EventServiceLocal
+     */
     @EJB
     private LocationServiceLocal locationService;
+
+    /**
+     * Az események kezelését szolgáló EJB.
+     * @see pe.rendszerfejlesztes.services.EventServiceLocal
+     */
     @EJB
     private EventServiceLocal eventService;
 
+    /**
+     * Az adatbázisban található összes helyeszín listáját adja vissza JSON formátumban.
+     * <p>
+     *     Elérése GET hívással: /api/event/locations
+     * </p>
+     * @return az összes helyszín listjája
+     */
     @GET
     @Path("locations")
     @Produces("application/json")
@@ -32,6 +54,13 @@ public class EventService {
         return Response.ok(locationWrapper).build();
     }
 
+    /**
+     * Az adatbázisban található összes esemény listáját adja vissza JSON formátumban.
+     * <p>
+     *     Elérése GET hívással: /api/event
+     * </p>
+     * @return az összes esemény listája
+     */
     @GET
     @Produces("application/json")
     public Response getAllEvents() {
@@ -41,6 +70,12 @@ public class EventService {
         return Response.ok(locationWrapper).build();
     }
 
+    /**
+     * A paraméterben megadott objektum adattagjainak értéke alapján keres a programok között.
+     * Üres listát ad vissza, ha egy programot sem talál.
+     * @param event keresési feltételek
+     * @return a keresési feltételeknek megfelelő események listája
+     */
     @POST
     @Produces("application/json")
     @Path("search")
