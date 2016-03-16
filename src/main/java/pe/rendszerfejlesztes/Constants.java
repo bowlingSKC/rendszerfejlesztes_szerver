@@ -16,4 +16,15 @@ public interface Constants {
      */
     int ADMIN_PRIVILAGE_ID = 2;
 
+
+    /**
+     * Opcionális foglalás jelzése a jegyeknél. Megerősítésre vár.
+     */
+    int TICKET_OPTIONAL = 1;
+
+    /**
+     * Jegy véglegesen lefoglalva.
+     */
+    int TICKET_BOOKED = 2;
+
 }

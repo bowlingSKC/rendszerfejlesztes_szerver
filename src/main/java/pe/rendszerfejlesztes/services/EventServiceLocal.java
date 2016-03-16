@@ -1,6 +1,7 @@
 package pe.rendszerfejlesztes.services;
 
 import pe.rendszerfejlesztes.modell.Event;
+import pe.rendszerfejlesztes.modell.Sector;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -27,5 +28,19 @@ public interface EventServiceLocal {
      * @return a keresési feltételeknek megfelelő események listája
      */
     List<Event> searchEvent(Event event);
+
+    /**
+     * Adatbázisból lekérdezi egy eseményhez tartozó szektorok listáját.
+     * @param id az esemény elsődleges kulcsa
+     * @return az eseményhez tartozó szektorok listája
+     */
+    List<Sector> getSectorsByEventId(Integer id);
+
+    /**
+     * Adatbázisból kikeresi a paraméterben megadott szektorhoz tartozó eseményt.
+     * @param sector szektor
+     * @return a szektorhoz tartozó esemény
+     */
+    Event getEventBySector(Sector sector);
 
 }

@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 /**
  * A rendszerben lévő felhasználók osztálya.
@@ -63,6 +64,12 @@ public class User {
     @NotNull
     @Column(name = "privilage")
     private Integer privilage;
+
+    /**
+     * A felhasználóhoz tartozó foglalt jegyek.
+     */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Ticket> tickets;
 
     /**
      * Paraméter nélküli konstruktor.
@@ -144,6 +151,14 @@ public class User {
 
     public void setPrivilage(Integer privilage) {
         this.privilage = privilage;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
     }
 
     @Override

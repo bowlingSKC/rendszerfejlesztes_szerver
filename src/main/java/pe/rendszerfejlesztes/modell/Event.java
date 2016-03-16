@@ -6,6 +6,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Egy eseményt leíró osztály.
@@ -81,6 +82,9 @@ public class Event {
     @JoinColumn(name = "performer_id", referencedColumnName = "id")
     @ManyToOne
     private Performer performer;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
+    private List<Sector> sectorList;
 
     /**
      * Paraméter nélküli konstruktor.
@@ -167,6 +171,15 @@ public class Event {
 
     public void setPerformer(Performer performer) {
         this.performer = performer;
+    }
+
+
+    public List<Sector> getSectorList() {
+        return sectorList;
+    }
+
+    public void setSectorList(List<Sector> sectorList) {
+        this.sectorList = sectorList;
     }
 
     @Override
