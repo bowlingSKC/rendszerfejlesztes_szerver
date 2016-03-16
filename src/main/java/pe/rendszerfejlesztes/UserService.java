@@ -5,7 +5,9 @@ import pe.rendszerfejlesztes.services.UserServiceLocal;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * A felhasználók kezelésére szolgáló végpont.
@@ -63,6 +65,17 @@ public class UserService {
             System.out.println("A bejelentkezes sikerult: " + user);
         }
         return Response.ok(user).build();
+    }
+
+
+    @GET
+    @Produces("application/json")
+    //@Path("{email}/{pswd}")
+    public Response getUsers() {
+        System.out.println( "Keres erkezett: felhasznalok lekerese" );
+        List<User> users = userService.listUsers();
+        GenericEntity<List<User>> usersWrapper = new GenericEntity<List<User>>(users) {};
+        return Response.ok(usersWrapper).build();
     }
 
 }

@@ -7,6 +7,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A {@link pe.rendszerfejlesztes.services.UserServiceLocal} egy implementált osztálya relációs adatbázisok perzisztens rétegének megvalósításához.
@@ -57,5 +59,16 @@ public class UserService implements UserServiceLocal {
         }
 
         return logged;
+    }
+
+    //ANDRAS
+    @Override
+    public List<User> listUsers() {
+        Query query = em.createQuery("SELECT user FROM User user");
+        List<User> users = query.getResultList();
+        if( users == null ) {
+            return new ArrayList<>();
+        }
+        return users;
     }
 }

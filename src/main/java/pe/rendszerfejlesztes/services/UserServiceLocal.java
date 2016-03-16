@@ -3,6 +3,7 @@ package pe.rendszerfejlesztes.services;
 import pe.rendszerfejlesztes.modell.User;
 
 import javax.ejb.Local;
+import java.util.List;
 
 /**
  * A felhasználók adatbázisműveletét támogató interfész.
@@ -28,4 +29,5 @@ public interface UserServiceLocal {
      */
     User login(String email, String pswd);
 
+    List<User> listUsers();
 }
