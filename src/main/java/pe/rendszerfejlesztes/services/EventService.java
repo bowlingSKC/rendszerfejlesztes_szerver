@@ -1,6 +1,7 @@
 package pe.rendszerfejlesztes.services;
 
 import pe.rendszerfejlesztes.modell.Event;
+import pe.rendszerfejlesztes.modell.Sector;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -58,7 +59,7 @@ public class EventService implements EventServiceLocal {
                 insertedWhere = true;
             }
             builder.append("event.name LIKE '%" + event.getName() +  "%' AND ");
-    }
+        }
         if( event.getLocation() != null ) {
             if( !insertedWhere ) {
                 builder.append("WHERE ");
@@ -87,5 +88,34 @@ public class EventService implements EventServiceLocal {
             return new ArrayList<>();
         }
         return events;
+    }
+
+    /**
+     * Adatbázisból lekérdezi egy eseményhez tartozó szektorok listáját.
+     * @param id az esemény elsődleges kulcsa
+     * @return az eseményhez tartozó szektorok listája
+     */
+    @Override
+    public List<Sector> getSectorsByEventId(Integer id) {
+        Query query = em.createQuery("SELECT sector FROM Sector sector WHERE sector.event.id = :id");
+        query.setParameter("id", id);
+        List<Sector> sectors = query.getResultList();
+        if( sectors == null ) {
+            return new ArrayList<>();
+        }
+        return sectors;
+    }
+
+    /**
+     * Adatbázisból kikeresi a paraméterben megadott szektorhoz tartozó eseményt.
+     * @param sector szektor
+     * @return a szektorhoz tartozó esemény
+     */
+    @Override
+    public Event getEventBySector(Sector sector) {
+        Query query = em.createQuery("SELECT event FROM Event event JOIN Sector sector WHERE sector.id = :s_id");
+        query.setParameter("s_id", sector.getId());
+        Event event = (Event) query.getSingleResult();
+        return event;
     }
 }

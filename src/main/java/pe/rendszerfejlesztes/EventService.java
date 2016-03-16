@@ -2,14 +2,12 @@ package pe.rendszerfejlesztes;
 
 import pe.rendszerfejlesztes.modell.Event;
 import pe.rendszerfejlesztes.modell.Location;
+import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.services.EventServiceLocal;
 import pe.rendszerfejlesztes.services.LocationServiceLocal;
 
 import javax.ejb.EJB;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -84,6 +82,23 @@ public class EventService {
         List<Event> events = eventService.searchEvent(event);
         GenericEntity<List<Event>> eventsWrapper = new GenericEntity<List<Event>>(events) {};
         return Response.ok(eventsWrapper).build();
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("sectors/byevent/{id}")
+    public Response getSectorsByEventId(@PathParam("id") Integer id) {
+        List<Sector> sectors = eventService.getSectorsByEventId(id);
+        GenericEntity<List<Sector>> sectorsWrapper = new GenericEntity<List<Sector>>(sectors) {};
+        return Response.ok(sectorsWrapper).build();
+    }
+
+    @POST
+    @Produces("application/json")
+    @Path("sectors/bysector")
+    public Response getEventBySector(Sector sector) {
+        Event event = eventService.getEventBySector(sector);
+        return Response.ok(event).build();
     }
 
 }
