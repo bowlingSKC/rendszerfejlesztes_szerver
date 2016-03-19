@@ -76,6 +76,10 @@ public class Sector {
 
     }
 
+    public Sector(int sectorId) {
+        this.id = sectorId;
+    }
+
     /**
      * Konstruktor.
      * @param numOfRows sorok száma

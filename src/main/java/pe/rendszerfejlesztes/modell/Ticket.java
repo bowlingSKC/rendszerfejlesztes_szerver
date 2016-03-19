@@ -12,8 +12,8 @@ import java.util.Date;
 /**
  * Egy eseményhez tartozó jegy, amit a felhasználó foglal.
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "ticket")
 public class Ticket {
@@ -187,5 +187,19 @@ public class Ticket {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id=" + id +
+                ", sector=" + sector +
+                ", user=" + user +
+                ", bookedTime=" + bookedTime +
+                ", paid=" + paid +
+                ", row=" + row +
+                ", col=" + col +
+                ", status=" + status +
+                '}';
     }
 }

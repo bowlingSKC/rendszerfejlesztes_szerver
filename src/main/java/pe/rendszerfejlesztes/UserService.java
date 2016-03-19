@@ -43,6 +43,21 @@ public class UserService {
     }
 
     /**
+     * Adatbázisban való keresése a megadott feltételek alapján.
+     * @param user keresési feltételek
+     * @return a keresési feltételeknek megfelelő felhasználók listája
+     */
+    @POST
+    @Produces("application/json")
+    @Path("search")
+    public Response searchUser(User user) {
+        System.out.println("Keresesi feltetelek: " + user);
+        List<User> users = userService.searchUser(user);
+        GenericEntity<List<User>> usersWrapper = new GenericEntity<List<User>>(users) {};
+        return Response.ok(usersWrapper).build();
+    }
+
+    /**
      * A rendszerbe való bejelentkezés ellenőrzése. Helytelen bejelentkezés esetén null értékkel tér vissza.
      * <p>
      *     Elérés GET hívással: /api/user/{email}/{jelszo}.
@@ -67,10 +82,12 @@ public class UserService {
         return Response.ok(user).build();
     }
 
-
+    /**
+     * Adatbázisból visszaadja az összes regisztrált felhasználót.
+     * @return az összes felhasználó listája
+     */
     @GET
     @Produces("application/json")
-    //@Path("{email}/{pswd}")
     public Response getUsers() {
         System.out.println( "Keres erkezett: felhasznalok lekerese" );
         List<User> users = userService.listUsers();

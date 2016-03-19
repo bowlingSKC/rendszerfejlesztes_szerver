@@ -74,9 +74,14 @@ public class User {
     /**
      * Paraméter nélküli konstruktor.
      * Semmilyen értéket nem állít be az adattagoknak.
+     * @param userId
      */
     public User() {
 
+    }
+
+    public User(int userId) {
+        this.id = userId;
     }
 
     /**

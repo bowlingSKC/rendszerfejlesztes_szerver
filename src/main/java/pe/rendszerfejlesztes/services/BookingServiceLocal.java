@@ -23,13 +23,11 @@ public interface BookingServiceLocal {
     List<Ticket> getUserTicket(User user);
 
     /**
-     * Jegyfoglalás elmentése az adatbázisba.
-     * @param user ki foglalta a jegyet
+     * Jegyfoglalás elmentése az adatbázisba. Sikertelen foglalás esetén null értékkel tér vissza.
      * @param ticket jegy
-     * @param sector mely szektorhoz tartozik a jegy
      * @return a perzisztens jegy objektum
      */
-    Ticket bookTicket(User user, Ticket ticket, Sector sector);
+    Ticket bookTicket(Ticket ticket);
 
     /**
      * Foglalás törlése az adatbázisból.

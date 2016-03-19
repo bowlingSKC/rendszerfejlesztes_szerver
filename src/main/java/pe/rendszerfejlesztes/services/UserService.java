@@ -61,10 +61,41 @@ public class UserService implements UserServiceLocal {
         return logged;
     }
 
-    //ANDRAS
+    /**
+     * Az összes felhasználó lekérdezése az adatbázisból.
+     * @return a regisztrált felhasználók listája
+     */
     @Override
     public List<User> listUsers() {
         Query query = em.createQuery("SELECT user FROM User user");
+        List<User> users = query.getResultList();
+        if( users == null ) {
+            return new ArrayList<>();
+        }
+        return users;
+    }
+
+    /**
+     * Felhasználók keresése az adatbázisban a megadott szempontok szerint.
+     * @param user keresési feltételek
+     * @return a keresési feltételeknek megfelelő felhasználók listája
+     */
+    @Override
+    public List<User> searchUser(User user) {
+        Query query;
+        if( !user.getName().equals("") && !user.getEmail().equals("") ) {
+            query = em.createQuery("SELECT user FROM User user WHERE user.email LIKE :email AND user.name LIKE :name");
+            query.setParameter("email", "%" + user.getEmail() + "%");
+            query.setParameter("name", "%" + user.getName() + "%");
+        } else if( !user.getName().equals("") ) {
+            query = em.createQuery("SELECT user FROM User user WHERE user.name LIKE :name");
+            query.setParameter("name", "%" + user.getName() + "%");
+        } else if( !user.getEmail().equals("") ) {
+            query = em.createQuery("SELECT user FROM User user WHERE user.email LIKE :email");
+            query.setParameter("email", "%" + user.getEmail() + "%");
+        } else {
+            return listUsers();
+        }
         List<User> users = query.getResultList();
         if( users == null ) {
             return new ArrayList<>();

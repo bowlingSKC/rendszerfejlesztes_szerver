@@ -47,14 +47,31 @@ public class BookService implements BookingServiceLocal {
 
     /**
      * Jegyfoglalás elmentése az adatbázisba.
-     * @param user ki foglalta a jegyet
      * @param ticket jegy
-     * @param sector mely szektorhoz tartozik a jegy
      * @return a perzisztens jegy objektum
      */
     @Override
-    public Ticket bookTicket(User user, Ticket ticket, Sector sector) {
-        return null;
+    public Ticket bookTicket(Ticket ticket) {
+        Query query = em.createQuery("SELECT COUNT(ticket.id) FROM Ticket ticket WHERE ticket.sector.id = :sector_id");
+        query.setParameter("sector_id", ticket.getSector().getId());
+        int count = ((Number) query.getSingleResult()).intValue();
+
+        /*
+        if( count > (ticket.getSector().getNumOfCols() * ticket.getSector().getNumOfCols()) ) {
+            return null;
+        }
+        */
+
+        if( ticket.getCol() == null || ticket.getRow() == null ) {
+            // állóhelyes
+            em.persist(ticket);
+            em.flush();
+        } else {
+            // ülőhelyes
+            em.persist(ticket);
+            em.flush();
+        }
+        return ticket;
     }
 
     /**

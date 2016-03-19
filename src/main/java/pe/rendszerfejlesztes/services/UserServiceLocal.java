@@ -30,4 +30,11 @@ public interface UserServiceLocal {
     User login(String email, String pswd);
 
     List<User> listUsers();
+    /**
+     * Felhasználók keresése az adatbázisban a megadott szempontok szerint.
+     * @param user keresési feltételek
+     * @return a keresési feltételeknek megfelelő felhasználók listája
+     */
+    List<User> searchUser(User user);
+
 }

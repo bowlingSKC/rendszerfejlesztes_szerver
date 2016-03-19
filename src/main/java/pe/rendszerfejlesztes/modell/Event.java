@@ -69,6 +69,10 @@ public class Event {
     @Column(name = "price")
     private Integer price;
 
+    @Basic(optional = false)
+    @Column(name = "seat")
+    private boolean seats;
+
     /**
      * Az eseményhez tarzozó helyszín.
      */
@@ -180,6 +184,14 @@ public class Event {
 
     public void setSectorList(List<Sector> sectorList) {
         this.sectorList = sectorList;
+    }
+
+    public boolean isSeats() {
+        return seats;
+    }
+
+    public void setSeats(boolean seats) {
+        this.seats = seats;
     }
 
     @Override
