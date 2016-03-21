@@ -98,6 +98,7 @@ public class EventService {
     @Path("sectors/bysector")
     public Response getEventBySector(Sector sector) {
         Event event = eventService.getEventBySector(sector);
+        System.out.println("A keresett esemeny szektor szerint: " + event);
         return Response.ok(event).build();
     }
 

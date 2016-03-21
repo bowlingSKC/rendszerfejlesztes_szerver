@@ -1,5 +1,6 @@
 package pe.rendszerfejlesztes.services;
 
+import pe.rendszerfejlesztes.BookingService;
 import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
@@ -62,15 +63,18 @@ public class BookService implements BookingServiceLocal {
         }
         */
 
+
         if( ticket.getCol() == null || ticket.getRow() == null ) {
             // állóhelyes
             em.persist(ticket);
-            em.flush();
         } else {
             // ülőhelyes
             em.persist(ticket);
-            em.flush();
         }
+        User user = em.find(User.class, ticket.getUser().getId());
+        em.refresh(user);
+        em.flush();
+
         return ticket;
     }
 
@@ -84,6 +88,15 @@ public class BookService implements BookingServiceLocal {
         em.flush();
     }
 
+    public List<Ticket> getAllTicket() {
+        Query query = em.createQuery("SELECT ticket FROM Ticket ticket");
+        List<Ticket> tickets = query.getResultList();
+        if( tickets == null ) {
+            return new ArrayList<>();
+        }
+        return tickets;
+    }
+
     /**
      * Adatbázisból kikeresi a jegyhez tartozó szektort.
      * @param ticket jegy
@@ -91,9 +104,12 @@ public class BookService implements BookingServiceLocal {
      */
     @Override
     public Sector getSectorByTicket(Ticket ticket) {
-        Query query = em.createQuery("SELECT sector FROM Sector sector JOIN Ticket ticket WHERE ticket.id = :t_id");
-        query.setParameter("t_id", ticket.getId());
-        Sector sector = (Sector) query.getSingleResult();
-        return sector;
+        List<Ticket> tickets = getAllTicket();
+        for(Ticket t : tickets) {
+            if( t.getId().equals(ticket.getId()) ) {
+                return t.getSector();
+            }
+        }
+        return null;
     }
 }

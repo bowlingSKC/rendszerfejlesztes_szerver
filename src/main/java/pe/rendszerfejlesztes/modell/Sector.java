@@ -151,4 +151,17 @@ public class Sector {
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
     }
+
+    @Override
+    public String toString() {
+        return "Sector{" +
+                "id=" + id +
+                ", numOfRows=" + numOfRows +
+                ", numOfCols=" + numOfCols +
+                ", price=" + price +
+                ", event=" + event +
+                ", depth=" + depth +
+                ", tickets=" + tickets +
+                '}';
+    }
 }

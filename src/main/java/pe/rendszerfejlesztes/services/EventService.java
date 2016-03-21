@@ -113,9 +113,21 @@ public class EventService implements EventServiceLocal {
      */
     @Override
     public Event getEventBySector(Sector sector) {
+        List<Event> allEvents = getAllEvents();
+        for(Event event : allEvents) {
+            for(Sector sec : event.getSectorList()) {
+                if( sec.getId().equals(sector.getId()) ) {
+                    return event;
+                }
+            }
+        }
+        return null;
+        /*
+        System.out.println("Kapott szektor: " + sector);
         Query query = em.createQuery("SELECT event FROM Event event JOIN Sector sector WHERE sector.id = :s_id");
         query.setParameter("s_id", sector.getId());
         Event event = (Event) query.getSingleResult();
-        return event;
+        System.out.println("Talalt esemeny: " + event);
+        */
     }
 }
