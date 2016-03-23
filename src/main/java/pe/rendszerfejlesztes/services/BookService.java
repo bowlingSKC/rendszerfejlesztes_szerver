@@ -6,6 +6,7 @@ import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
 
 import javax.ejb.Stateless;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -82,10 +83,38 @@ public class BookService implements BookingServiceLocal {
      * Foglalás törlése az adatbázisból.
      * @param ticket a törölni kívánt jegy
      */
+    /*@Override
+    public boolean deleteTicket(Ticket ticket) {
+        try{
+            ticket = em.getReference(Ticket.class, ticket.getId());
+            em.remove(ticket);
+            em.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }*/
     @Override
-    public void deleteTicket(Ticket ticket) {
-        em.remove(ticket);
-        em.flush();
+    public boolean deleteTicket(int ticketID) {
+        try{
+            Query query = em.createQuery("SELECT ticket FROM Ticket ticket");
+            List<Ticket> tickets = query.getResultList();
+            Ticket ticket = new Ticket();
+            for(Ticket tic : tickets){
+                if(tic.getId() == ticketID){
+                    ticket = tic;
+                }
+            }
+            if(ticket != null){
+                em.remove(ticket);
+                em.flush();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public List<Ticket> getAllTicket() {

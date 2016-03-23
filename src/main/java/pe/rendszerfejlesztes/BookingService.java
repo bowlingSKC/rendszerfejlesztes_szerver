@@ -7,6 +7,9 @@ import pe.rendszerfejlesztes.modell.wrappers.BookingWrapper;
 import pe.rendszerfejlesztes.services.BookingServiceLocal;
 
 import javax.ejb.EJB;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
@@ -44,11 +47,33 @@ public class BookingService {
      * @param ticket a törölni kívánt jegy
      * @return a törölt jegy
      */
+    /*@POST
+    @Produces("application/json")
+    @Path("delete")
+    public Response deleteTicket(Ticket ticket) {
+        if(bookingService.deleteTicket(ticket)){
+            System.out.println("Removed: " + ticket.toString());
+            return Response.ok(ticket).build();
+
+        }else{
+            System.out.println("Failed to remove: " + ticket.toString());
+            return Response.status(400).build();
+        }
+
+    }*/
     @DELETE
     @Produces("application/json")
-    public Response deleteTicket(Ticket ticket) {
-        bookingService.deleteTicket(ticket);
-        return Response.ok(ticket).build();
+    @Path("{ticket}")
+    public Response deleteTicket(@PathParam("ticket") int ticketID) {
+        if(bookingService.deleteTicket(ticketID)){
+            System.out.println("Removed: " + ticketID);
+            return Response.ok().build();
+
+        }else{
+            System.out.println("Failed to remove: " + ticketID);
+            return Response.status(400).build();
+        }
+
     }
 
     /**

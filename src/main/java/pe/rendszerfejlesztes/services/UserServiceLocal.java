@@ -29,7 +29,18 @@ public interface UserServiceLocal {
      */
     User login(String email, String pswd);
 
+    /**
+     * Az összes felhasználó lekérdezése az adatbázisból.
+     * @return a regisztrált felhasználók listája
+     */
     List<User> listUsers();
+
+    /**
+     * Adatbázisból visszaadja a felhasználót friss adatokkal.
+     * @return a paraméterben megadott felhasználó
+     */
+    //User updateUser(User user);
+
     /**
      * Felhasználók keresése az adatbázisban a megadott szempontok szerint.
      * @param user keresési feltételek

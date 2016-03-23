@@ -83,6 +83,18 @@ public class UserService {
     }
 
     /**
+     * Adatbázisból visszaadja a felhasználót friss adatokkal.
+     * @return a paraméterben megadott felhasználó
+     */
+    /*@POST
+    @Produces("application/json")
+    @Path("update")
+    public Response update(User user) {
+        User usr = userService.updateUser(user);
+        return Response.ok(usr).build();
+    }*/
+
+    /**
      * Adatbázisból visszaadja az összes regisztrált felhasználót.
      * @return az összes felhasználó listája
      */
