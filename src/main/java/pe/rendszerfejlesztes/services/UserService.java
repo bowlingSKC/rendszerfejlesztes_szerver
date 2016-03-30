@@ -1,5 +1,6 @@
 package pe.rendszerfejlesztes.services;
 
+import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
 
 import javax.ejb.Stateless;
@@ -118,5 +119,22 @@ public class UserService implements UserServiceLocal {
             return new ArrayList<>();
         }
         return users;
+    }
+
+    /**
+     * A megadott jegyet állítja át fizetettre.
+     * @return az átállított jegy
+     */
+    @Override
+    public Ticket setTicketPaid(Ticket ticket){
+        Query query = em.createQuery("SELECT ticket FROM Ticket ticket");
+        List<Ticket> tickets = query.getResultList();
+        for(Ticket tic : tickets){
+            if (tic.getId() == ticket.getId()){
+                tic.setPaid(true);
+                return tic;
+            }
+        }
+        return null;
     }
 }

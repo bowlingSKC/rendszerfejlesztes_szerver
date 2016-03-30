@@ -1,5 +1,6 @@
 package pe.rendszerfejlesztes.services;
 
+import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
 
 import javax.ejb.Local;
@@ -47,5 +48,11 @@ public interface UserServiceLocal {
      * @return a keresési feltételeknek megfelelő felhasználók listája
      */
     List<User> searchUser(User user);
+
+    /**
+     * A megadott jegyet állítja át fizetettre.
+     * @return az átállított jegy
+     */
+    Ticket setTicketPaid(Ticket ticket);
 
 }

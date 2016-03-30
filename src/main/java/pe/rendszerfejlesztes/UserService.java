@@ -1,5 +1,6 @@
 package pe.rendszerfejlesztes;
 
+import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
 import pe.rendszerfejlesztes.services.UserServiceLocal;
 
@@ -105,6 +106,18 @@ public class UserService {
         List<User> users = userService.listUsers();
         GenericEntity<List<User>> usersWrapper = new GenericEntity<List<User>>(users) {};
         return Response.ok(usersWrapper).build();
+    }
+
+    /**
+     * A megadott jegyet állítja át fizetettre.
+     * @return az átállított jegy
+     */
+    @PUT
+    @Path("paid")
+    @Produces("application/json")
+    public Response setPaidTicket(Ticket ticket) {
+        Ticket back = userService.setTicketPaid(ticket);
+        return Response.ok(back).build();
     }
 
 }
