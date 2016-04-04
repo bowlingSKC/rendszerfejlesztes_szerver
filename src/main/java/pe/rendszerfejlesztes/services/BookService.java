@@ -92,6 +92,9 @@ public class BookService implements BookingServiceLocal {
         Integer id = (Integer) query.getSingleResult();
 
         Ticket delete = em.find(Ticket.class, ticket.getId());
+        if(delete.isPaid()){
+            return false;
+        }
         em.remove(delete);
 
         Sector sector = em.find(Sector.class, id);

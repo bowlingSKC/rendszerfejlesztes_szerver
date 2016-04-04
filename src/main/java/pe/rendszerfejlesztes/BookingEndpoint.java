@@ -50,8 +50,13 @@ public class BookingEndpoint {
     @Path("delete")
     public Response deleteTicket(Ticket ticket) {
         System.out.println(ticket);
-        bookingService.deleteTicket(ticket);
-        return Response.ok().build();
+        boolean state = bookingService.deleteTicket(ticket);
+        if(state){
+            return Response.ok().build();
+        }else{
+            return Response.serverError().build();
+        }
+
     }
 
     /**
