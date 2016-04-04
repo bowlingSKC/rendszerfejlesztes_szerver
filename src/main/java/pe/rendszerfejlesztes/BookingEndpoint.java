@@ -1,15 +1,13 @@
 package pe.rendszerfejlesztes;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
-import pe.rendszerfejlesztes.modell.wrappers.BookingWrapper;
 import pe.rendszerfejlesztes.services.BookingServiceLocal;
 
 import javax.ejb.EJB;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
@@ -23,7 +21,7 @@ import java.util.List;
  * </p>
  */
 @Path("booking")
-public class BookingService {
+public class BookingEndpoint {
 
     @EJB
     private BookingServiceLocal bookingService;
@@ -47,33 +45,13 @@ public class BookingService {
      * @param ticket a törölni kívánt jegy
      * @return a törölt jegy
      */
-    /*@POST
+    @POST
     @Produces("application/json")
     @Path("delete")
     public Response deleteTicket(Ticket ticket) {
-        if(bookingService.deleteTicket(ticket)){
-            System.out.println("Removed: " + ticket.toString());
-            return Response.ok(ticket).build();
-
-        }else{
-            System.out.println("Failed to remove: " + ticket.toString());
-            return Response.status(400).build();
-        }
-
-    }*/
-    @DELETE
-    @Produces("application/json")
-    @Path("{ticket}")
-    public Response deleteTicket(@PathParam("ticket") int ticketID) {
-        if(bookingService.deleteTicket(ticketID)){
-            System.out.println("Removed: " + ticketID);
-            return Response.ok().build();
-
-        }else{
-            System.out.println("Failed to remove: " + ticketID);
-            return Response.status(400).build();
-        }
-
+        System.out.println(ticket);
+        bookingService.deleteTicket(ticket);
+        return Response.ok().build();
     }
 
     /**
@@ -91,21 +69,19 @@ public class BookingService {
 
     @PUT
     @Produces("application/json")
-    @Path("book/{user}/{sector}")
-    public Response bookTicket(@PathParam("user") int userId, @PathParam("sector") int sectorId) {
-        Ticket ticket = new Ticket();
-        ticket.setUser(new User(userId));
-        ticket.setStatus(2);
-        ticket.setSector(new Sector(sectorId));
-        ticket.setPaid(false);
-        ticket.setBookedTime(new Date());
+    @Path("book")
+    public Response bookTicket(String ticket) {
+        System.out.println(ticket);
 
-        Ticket booked = bookingService.bookTicket(ticket);
+        Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new GsonUTCdateAdapter()).create();
+        Ticket obj = gson.fromJson(ticket, Ticket.class);
+        Ticket booked = bookingService.bookTicket(obj);
+
         if( booked == null ) {
             return Response.serverError().build();
         }
         System.out.println("Sikeres jegy foglalas!");
-        return Response.ok(booked).build();
+        return Response.ok().build();
     }
 
 }

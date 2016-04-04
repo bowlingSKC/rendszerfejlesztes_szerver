@@ -19,7 +19,7 @@ import java.util.List;
  * </p>
  */
 @Path("event")
-public class EventService {
+public class EventEndpoint {
 
     /**
      * A helyszínek kezelését szolgáló EJB.

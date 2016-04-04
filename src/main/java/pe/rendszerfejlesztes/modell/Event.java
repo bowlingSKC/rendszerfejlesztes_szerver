@@ -61,14 +61,8 @@ public class Event {
     private String description;
 
     /**
-     * Az eseményhez tartozó ár.
-     * Nem vehet fel null értéket adatbázisba való beszúrás előtt.
+     * Ülőhelyes vagy állóhelyes-e az adott esemény.
      */
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "price")
-    private Integer price;
-
     @Basic(optional = false)
     @Column(name = "seat")
     private boolean seats;
@@ -103,14 +97,12 @@ public class Event {
      * @param start az esemény kezdési időpontja
      * @param duration az esemény hossza percben
      * @param description az eseményhez tartozó leírás
-     * @param price az eseményhez tartozó ár
      */
-    public Event(String name, Date start, Integer duration, String description, Integer price) {
+    public Event(String name, Date start, Integer duration, String description) {
         this.name = name;
         this.start = start;
         this.duration = duration;
         this.description = description;
-        this.price = price;
     }
 
     public String getName() {
@@ -143,14 +135,6 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
     }
 
     public Integer getId() {
@@ -202,7 +186,6 @@ public class Event {
                 ", start=" + start +
                 ", duration=" + duration +
                 ", description='" + description + '\'' +
-                ", price=" + price +
                 '}';
     }
 

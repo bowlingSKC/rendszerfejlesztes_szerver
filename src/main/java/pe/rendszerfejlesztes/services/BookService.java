@@ -1,17 +1,16 @@
 package pe.rendszerfejlesztes.services;
 
-import pe.rendszerfejlesztes.BookingService;
 import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
 
 import javax.ejb.Stateless;
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A {@link pe.rendszerfejlesztes.services.BookingServiceLocal} egy implementált osztálya relációs adatbázisok perzisztens rétegének megvalósításához.
@@ -54,26 +53,30 @@ public class BookService implements BookingServiceLocal {
      */
     @Override
     public Ticket bookTicket(Ticket ticket) {
-        Query query = em.createQuery("SELECT COUNT(ticket.id) FROM Ticket ticket WHERE ticket.sector.id = :sector_id");
-        query.setParameter("sector_id", ticket.getSector().getId());
-        int count = ((Number) query.getSingleResult()).intValue();
-
-        /*
-        if( count > (ticket.getSector().getNumOfCols() * ticket.getSector().getNumOfCols()) ) {
-            return null;
-        }
-        */
-
-
         if( ticket.getCol() == null || ticket.getRow() == null ) {
             // állóhelyes
+            Query query = em.createQuery("SELECT COUNT(ticket.id) FROM Ticket ticket WHERE ticket.sector.id = :sector_id");
+            query.setParameter("sector_id", ticket.getSector().getId());
+            long reserved = (long) query.getSingleResult();
+            System.out.println("Ennyi foglalt van mar: " + reserved);
             em.persist(ticket);
         } else {
             // ülőhelyes
+            Query query = em.createQuery("SELECT ticket FROM Ticket ticket WHERE ticket.sector.id = :sector_id");
+            query.setParameter("sector_id", ticket.getSector().getId());
+            List<Ticket> tickets = query.getResultList();
+            for(Ticket t : tickets) {
+                if(Objects.equals(ticket.getCol(), t.getCol()) && Objects.equals(ticket.getRow(), t.getRow())) {
+                    System.out.println("Foglalt helyre erkezett foglalasi keres");
+                    return null;
+                }
+            }
             em.persist(ticket);
         }
         User user = em.find(User.class, ticket.getUser().getId());
+        Sector sector = em.find(Sector.class, ticket.getSector().getId());
         em.refresh(user);
+        em.refresh(sector);
         em.flush();
 
         return ticket;
@@ -81,39 +84,20 @@ public class BookService implements BookingServiceLocal {
 
     /**
      * Foglalás törlése az adatbázisból.
-     * @param ticket a törölni kívánt jegy
      */
-    /*@Override
-    public boolean deleteTicket(Ticket ticket) {
-        try{
-            ticket = em.getReference(Ticket.class, ticket.getId());
-            em.remove(ticket);
-            em.flush();
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }*/
     @Override
-    public boolean deleteTicket(int ticketID) {
-        try{
-            Query query = em.createQuery("SELECT ticket FROM Ticket ticket");
-            List<Ticket> tickets = query.getResultList();
-            Ticket ticket = new Ticket();
-            for(Ticket tic : tickets){
-                if(tic.getId() == ticketID){
-                    ticket = tic;
-                }
-            }
-            if(ticket != null){
-                em.remove(ticket);
-                em.flush();
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+    public boolean deleteTicket(Ticket ticket) {
+        Query query = em.createQuery("SELECT sector.id FROM Sector sector JOIN sector.tickets ticket WHERE ticket.id = :id");
+        query.setParameter("id", ticket.getId());
+        Integer id = (Integer) query.getSingleResult();
+
+        Ticket delete = em.find(Ticket.class, ticket.getId());
+        em.remove(delete);
+
+        Sector sector = em.find(Sector.class, id);
+        em.refresh(sector);
+        em.flush();
+
         return true;
     }
 

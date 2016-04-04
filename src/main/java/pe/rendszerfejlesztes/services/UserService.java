@@ -76,23 +76,6 @@ public class UserService implements UserServiceLocal {
         return users;
     }
 
-
-    /**
-     * Adatbázisból visszaadja a felhasználót friss adatokkal.
-     * @return a paraméterben megadott felhasználó
-     */
-    /*@Override
-    public User updateUser(User user) {
-        Query query = em.createQuery("SELECT user FROM User user");
-        List<User> users = query.getResultList();
-        for(User usr : users){
-            if(usr.getId() == user.getId()){
-                return usr;
-            }
-        }
-        return null;
-    }*/
-
     /**
      * Felhasználók keresése az adatbázisban a megadott szempontok szerint.
      * @param user keresési feltételek

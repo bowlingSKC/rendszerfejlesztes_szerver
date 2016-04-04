@@ -17,7 +17,7 @@ import java.util.List;
  * </p>
  */
 @Path("user")
-public class UserService {
+public class UserEndpoint {
 
     /**
      * A felhasználók kezelését szolgáló EJB.
@@ -101,7 +101,7 @@ public class UserService {
      */
     @GET
     @Produces("application/json")
-    public Response getUsers() {
+    public Response login() {
         System.out.println( "Keres erkezett: felhasznalok lekerese" );
         List<User> users = userService.listUsers();
         GenericEntity<List<User>> usersWrapper = new GenericEntity<List<User>>(users) {};

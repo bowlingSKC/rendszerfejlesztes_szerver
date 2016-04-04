@@ -31,10 +31,8 @@ public interface BookingServiceLocal {
 
     /**
      * Foglalás törlése az adatbázisból.
-     * @param ticket a törölni kívánt jegy
      */
-    //boolean deleteTicket(Ticket ticket);
-    boolean deleteTicket(int ticketID);
+    boolean deleteTicket(Ticket ticket);
 
     /**
      * Adatbázisból kikeresi a jegyhez tartozó szektort.

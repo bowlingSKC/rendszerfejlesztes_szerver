@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
  * A végpontot az alábbi útvonalon lehet elérni: /api/test
  */
 @Path("test")
-public class Test {
+public class TestEndpoint {
 
     /**
      * A szerver működését ellenőrző végpont.
