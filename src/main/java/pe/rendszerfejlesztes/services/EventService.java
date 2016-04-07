@@ -2,7 +2,10 @@ package pe.rendszerfejlesztes.services;
 
 import pe.rendszerfejlesztes.modell.Event;
 import pe.rendszerfejlesztes.modell.Sector;
+import pe.rendszerfejlesztes.modell.Subscription;
+import pe.rendszerfejlesztes.modell.User;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,6 +30,9 @@ public class EventService implements EventServiceLocal {
      */
     @PersistenceContext(unitName = "serverUnit")
     EntityManager em;
+
+    @EJB
+    private SubscribeServiceLocal subscribeService;
 
     /**
      * Adatbázisból lekérdezi az összes eseményt.
@@ -129,5 +135,21 @@ public class EventService implements EventServiceLocal {
         Event event = (Event) query.getSingleResult();
         System.out.println("Talalt esemeny: " + event);
         */
+    }
+
+    @Override
+    public Event getSubscriptionByEventId(Integer id){
+        List<Event> events = getAllEvents();
+        List<Subscription> subscriptions = subscribeService.getAllSubscription();
+        for(Subscription s : subscriptions){
+            if(s.getId() == id){
+                for(Event e : events){
+                    if(e.getId() == s.getEvent().getId()){
+                        return e;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

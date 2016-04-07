@@ -2,6 +2,8 @@ package pe.rendszerfejlesztes.services;
 
 import pe.rendszerfejlesztes.modell.Event;
 import pe.rendszerfejlesztes.modell.Sector;
+import pe.rendszerfejlesztes.modell.Subscription;
+import pe.rendszerfejlesztes.modell.User;
 
 import javax.ejb.Local;
 import java.util.List;
@@ -42,5 +44,6 @@ public interface EventServiceLocal {
      * @return a szektorhoz tartozó esemény
      */
     Event getEventBySector(Sector sector);
+    Event getSubscriptionByEventId(Integer id);
 
 }

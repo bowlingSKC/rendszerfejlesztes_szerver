@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.3.11
+-- version 4.4.14
 -- http://www.phpmyadmin.net
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2016. Már 21. 18:25
--- Kiszolgáló verziója: 5.6.24
--- PHP verzió: 5.6.8
+-- Létrehozás ideje: 2016. Ápr 07. 20:14
+-- Kiszolgáló verziója: 5.6.26
+-- PHP verzió: 5.6.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Adatbázis: `rendszerfejlesztes`
@@ -43,11 +43,11 @@ CREATE TABLE IF NOT EXISTS `event` (
 --
 
 INSERT INTO `event` (`id`, `name`, `location_id`, `start`, `duration`, `performer_id`, `description`, `price`, `seat`) VALUES
-(3, 'Kool & the Gang', 5, '2016-06-16 18:00:00', 120, 3, NULL, 2500, 0),
+(3, 'Kool & the Gang', 5, '2016-06-16 18:00:00', 120, 3, NULL, 2500, 1),
 (4, 'Emeli Sandé', 4, '2016-06-17 19:00:00', 120, 4, 'Veszprémben első magyarországi fellépésén köszönthetjük.', 3000, 0),
 (5, 'Mike Stern & Didier Lockwood Band', 5, '2016-06-17 17:00:00', 200, 5, NULL, 1000, 0),
 (6, 'Révész Richárd Latin Trió', 6, '2016-06-17 17:00:00', 60, 6, NULL, 500, 0),
-(7, 'Ex - A. E. Bizottság a Palotában', 7, '2016-07-14 18:00:00', 500, 8, ' A Dubniczay-palota Várgalériája  ad helyet Ex - A. E. Bizottság a Palotában címmel egy rendhagyó kulturális programnak. Július 18-án Zalán Tibor író, költő, képzőművész megnyitójával és feLugossy László képzőművész, performer új filmjének vetítésével nyílik az Ex Vajda Lajos Stúdió kiállítása ef Zámbó Isván, feLugossy László és Wahorn András műveiből. A megnyitót követően a palota udvarában - az Albert Einstein BIZOTTSÁG egykori tagjainak közreműködésével - az efZámbó Happy Dead Band Akusztik és a Wahorn Airport adnak koncertet. Rossz Idő esetén a koncerteket a Hangvilla Multifunkcionális közösségi térben tartjuk. A program ingyenesen látogatható.', 0, 0);
+(7, 'Ex - A. E. Bizottság a Palotában', 7, '2016-07-17 12:00:00', 100, 8, ' A Dubniczay-palota Várgalériája  ad helyet Ex - A. E. Bizottság a Palotában címmel egy rendhagyó kulturális programnak. Július 18-án Zalán Tibor író, költő, képzőművész megnyitójával és feLugossy László képzőművész, performer új filmjének vetítésével nyílik az Ex Vajda Lajos Stúdió kiállítása ef Zámbó Isván, feLugossy László és Wahorn András műveiből. A megnyitót követően a palota udvarában - az Albert Einstein BIZOTTSÁG egykori tagjainak közreműködésével - az efZámbó Happy Dead Band Akusztik és a Wahorn Airport adnak koncertet. Rossz Idő esetén a koncerteket a Hangvilla Multifunkcionális közösségi térben tartjuk. A program ingyenesen látogatható.', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `sector` (
   `num_of_cols` int(11) NOT NULL,
   `price` int(11) NOT NULL,
   `depth` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `sector`
@@ -119,7 +119,31 @@ CREATE TABLE IF NOT EXISTS `sector` (
 INSERT INTO `sector` (`id`, `event_id`, `num_of_rows`, `num_of_cols`, `price`, `depth`) VALUES
 (2, 4, 2, 2, 200000, 1),
 (3, 4, 10, 10, 2500, 2),
-(4, 7, 10, 10, 5000, 1);
+(4, 7, 10, 10, 5000, 1),
+(6, 3, 12, 12, 2150, 2),
+(7, 3, 10, 10, 1500, 1),
+(8, 5, 12, 11, 1500, 1),
+(9, 6, 12, 11, 1700, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `subscription`
+--
+
+CREATE TABLE IF NOT EXISTS `subscription` (
+  `id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `subscription`
+--
+
+INSERT INTO `subscription` (`id`, `event_id`, `user_id`) VALUES
+(1, 3, 10),
+(2, 7, 10);
 
 -- --------------------------------------------------------
 
@@ -136,21 +160,23 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `seat_row` int(11) DEFAULT NULL,
   `set_col` int(11) DEFAULT NULL,
   `status` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `ticket`
 --
 
 INSERT INTO `ticket` (`id`, `sector_id`, `user_id`, `booked_time`, `paid`, `seat_row`, `set_col`, `status`) VALUES
-(3, 2, 7, '2016-03-19 20:03:21', 0, NULL, NULL, 2),
-(4, 3, 7, '2016-03-19 21:51:00', 0, NULL, NULL, 2),
-(5, 2, 7, '2016-03-20 18:17:24', 0, NULL, NULL, 2),
-(6, 2, 7, '2016-03-20 18:22:42', 0, NULL, NULL, 2),
-(7, 4, 7, '2016-03-21 09:25:59', 0, NULL, NULL, 2),
-(8, 4, 7, '2016-03-21 09:50:31', 0, NULL, NULL, 2),
-(9, 4, 7, '2016-03-21 09:59:47', 0, NULL, NULL, 2),
-(10, 4, 7, '2016-03-21 10:09:23', 0, NULL, NULL, 2);
+(14, 3, 10, '2016-04-05 06:23:47', 0, NULL, NULL, 2),
+(15, 4, 10, '2016-04-05 06:23:47', 0, NULL, NULL, 2),
+(17, 6, 10, '2016-04-05 05:30:05', 0, 5, 10, 2),
+(18, 6, 10, '2016-04-05 05:30:17', 0, 5, 9, 2),
+(19, 3, 10, '2016-04-05 06:29:40', 1, NULL, NULL, 2),
+(20, 9, 10, '2016-04-07 06:51:09', 1, NULL, NULL, 2),
+(21, 8, 10, '2016-04-07 06:50:38', 1, NULL, NULL, 2),
+(22, 8, 10, '2016-04-07 06:50:25', 0, NULL, NULL, 2),
+(24, 6, 10, '2016-04-05 06:16:04', 0, 4, 6, 2),
+(25, 6, 10, '2016-04-05 06:16:12', 0, 4, 7, 2);
 
 -- --------------------------------------------------------
 
@@ -164,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` varchar(255) COLLATE utf8_hungarian_ci NOT NULL,
   `privilage` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_hungarian_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `user`
@@ -172,7 +198,9 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 INSERT INTO `user` (`id`, `email`, `password`, `privilage`, `name`) VALUES
 (7, 'airbusfan@t-online.hu', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 1, 'Lénárt Bálint'),
-(8, 'admin@veszpremfest.hu', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 2, 'VeszpremFeszt Admin');
+(8, 'admin@veszpremfest.hu', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 2, 'VeszpremFeszt Admin'),
+(9, 'test', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 2, 'Pánczél András'),
+(10, 'a', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 1, 'Kiss Imre');
 
 --
 -- Indexek a kiírt táblákhoz
@@ -182,7 +210,9 @@ INSERT INTO `user` (`id`, `email`, `password`, `privilage`, `name`) VALUES
 -- A tábla indexei `event`
 --
 ALTER TABLE `event`
-  ADD PRIMARY KEY (`id`), ADD KEY `location_id` (`location_id`), ADD KEY `performer_id` (`performer_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `location_id` (`location_id`),
+  ADD KEY `performer_id` (`performer_id`);
 
 --
 -- A tábla indexei `location`
@@ -200,13 +230,26 @@ ALTER TABLE `performer`
 -- A tábla indexei `sector`
 --
 ALTER TABLE `sector`
-  ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `id` (`id`,`depth`), ADD KEY `event_id` (`event_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id` (`id`,`depth`),
+  ADD KEY `event_id` (`event_id`);
+
+--
+-- A tábla indexei `subscription`
+--
+ALTER TABLE `subscription`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event` (`event_id`) USING BTREE,
+  ADD KEY `user` (`user_id`) USING BTREE;
 
 --
 -- A tábla indexei `ticket`
 --
 ALTER TABLE `ticket`
-  ADD PRIMARY KEY (`id`), ADD KEY `event_id` (`sector_id`), ADD KEY `user_id` (`user_id`), ADD KEY `sector_id` (`sector_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `event_id` (`sector_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `sector_id` (`sector_id`);
 
 --
 -- A tábla indexei `user`
@@ -237,17 +280,22 @@ ALTER TABLE `performer`
 -- AUTO_INCREMENT a táblához `sector`
 --
 ALTER TABLE `sector`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+--
+-- AUTO_INCREMENT a táblához `subscription`
+--
+ALTER TABLE `subscription`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT a táblához `ticket`
 --
 ALTER TABLE `ticket`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT a táblához `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- Megkötések a kiírt táblákhoz
 --
@@ -256,21 +304,28 @@ ALTER TABLE `user`
 -- Megkötések a táblához `event`
 --
 ALTER TABLE `event`
-ADD CONSTRAINT `location_FK` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`),
-ADD CONSTRAINT `performer_FK` FOREIGN KEY (`performer_id`) REFERENCES `performer` (`id`);
+  ADD CONSTRAINT `location_FK` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`),
+  ADD CONSTRAINT `performer_FK` FOREIGN KEY (`performer_id`) REFERENCES `performer` (`id`);
 
 --
 -- Megkötések a táblához `sector`
 --
 ALTER TABLE `sector`
-ADD CONSTRAINT `FK_event_sector` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`);
+  ADD CONSTRAINT `FK_event_sector` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`);
+
+--
+-- Megkötések a táblához `subscription`
+--
+ALTER TABLE `subscription`
+  ADD CONSTRAINT `FK_event` FOREIGN KEY (`event_id`) REFERENCES `event` (`id`),
+  ADD CONSTRAINT `FK_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
 -- Megkötések a táblához `ticket`
 --
 ALTER TABLE `ticket`
-ADD CONSTRAINT `FK_event_sctor` FOREIGN KEY (`sector_id`) REFERENCES `sector` (`id`),
-ADD CONSTRAINT `FK_user_ticket` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `FK_event_sctor` FOREIGN KEY (`sector_id`) REFERENCES `sector` (`id`),
+  ADD CONSTRAINT `FK_user_ticket` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

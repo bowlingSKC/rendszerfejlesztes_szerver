@@ -1,14 +1,14 @@
 package pe.rendszerfejlesztes;
 
-import pe.rendszerfejlesztes.modell.Event;
-import pe.rendszerfejlesztes.modell.Location;
-import pe.rendszerfejlesztes.modell.Sector;
+import pe.rendszerfejlesztes.modell.*;
 import pe.rendszerfejlesztes.services.EventServiceLocal;
 import pe.rendszerfejlesztes.services.LocationServiceLocal;
+import pe.rendszerfejlesztes.services.SubscribeServiceLocal;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -91,6 +91,14 @@ public class EventEndpoint {
         List<Sector> sectors = eventService.getSectorsByEventId(id);
         GenericEntity<List<Sector>> sectorsWrapper = new GenericEntity<List<Sector>>(sectors) {};
         return Response.ok(sectorsWrapper).build();
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("bysubscription/{id}")
+    public Response getSubscriptionByEventId(@PathParam("id") Integer id) {
+        Event event = eventService.getSubscriptionByEventId(id);
+        return Response.ok(event).build();
     }
 
     @POST
