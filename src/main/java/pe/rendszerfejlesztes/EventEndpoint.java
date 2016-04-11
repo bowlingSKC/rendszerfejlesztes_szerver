@@ -1,5 +1,6 @@
 package pe.rendszerfejlesztes;
 
+import pe.rendszerfejlesztes.database.EventConnector;
 import pe.rendszerfejlesztes.modell.*;
 import pe.rendszerfejlesztes.services.EventServiceLocal;
 import pe.rendszerfejlesztes.services.LocationServiceLocal;
@@ -27,6 +28,9 @@ public class EventEndpoint {
      */
     @EJB
     private LocationServiceLocal locationService;
+
+    @EJB
+    private EventConnector eventConnector;
 
     /**
      * Az események kezelését szolgáló EJB.
@@ -63,7 +67,8 @@ public class EventEndpoint {
     @Produces("application/json")
     public Response getAllEvents() {
         System.out.println( "Keres erkezett: osszes esemeny lekerdezese" );
-        List<Event> events = eventService.getAllEvents();
+        //List<Event> events = eventService.getAllEvents();
+        List<Event> events = eventConnector.getAllEvents();
         GenericEntity<List<Event>> locationWrapper = new GenericEntity<List<Event>>(events) {};
         return Response.ok(locationWrapper).build();
     }
