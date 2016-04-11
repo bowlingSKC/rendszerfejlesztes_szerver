@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2016. Ápr 07. 20:14
+-- Létrehozás ideje: 2016. Ápr 11. 20:38
 -- Kiszolgáló verziója: 5.6.26
 -- PHP verzió: 5.6.12
 
@@ -19,6 +19,27 @@ SET time_zone = "+00:00";
 --
 -- Adatbázis: `rendszerfejlesztes`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `discount`
+--
+
+CREATE TABLE IF NOT EXISTS `discount` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) COLLATE utf8_hungarian_ci NOT NULL,
+  `value` double NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+
+--
+-- A tábla adatainak kiíratása `discount`
+--
+
+INSERT INTO `discount` (`id`, `name`, `value`) VALUES
+(1, 'Teljes arú', 1),
+(2, 'Diak/nyugdijas (20% kedvezmeny)', 0.8),
+(3, 'Gyerek - 12 eves korig (40% kedvezmeny)', 0.6);
 
 -- --------------------------------------------------------
 
@@ -135,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `subscription` (
   `id` int(11) NOT NULL,
   `event_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `subscription`
@@ -143,7 +164,10 @@ CREATE TABLE IF NOT EXISTS `subscription` (
 
 INSERT INTO `subscription` (`id`, `event_id`, `user_id`) VALUES
 (1, 3, 10),
-(2, 7, 10);
+(2, 7, 10),
+(3, 6, 10),
+(4, 6, 9),
+(5, 4, 10);
 
 -- --------------------------------------------------------
 
@@ -159,24 +183,25 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `paid` tinyint(4) NOT NULL,
   `seat_row` int(11) DEFAULT NULL,
   `set_col` int(11) DEFAULT NULL,
-  `status` int(11) NOT NULL
+  `status` int(11) NOT NULL,
+  `discount_id` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci;
 
 --
 -- A tábla adatainak kiíratása `ticket`
 --
 
-INSERT INTO `ticket` (`id`, `sector_id`, `user_id`, `booked_time`, `paid`, `seat_row`, `set_col`, `status`) VALUES
-(14, 3, 10, '2016-04-05 06:23:47', 0, NULL, NULL, 2),
-(15, 4, 10, '2016-04-05 06:23:47', 0, NULL, NULL, 2),
-(17, 6, 10, '2016-04-05 05:30:05', 0, 5, 10, 2),
-(18, 6, 10, '2016-04-05 05:30:17', 0, 5, 9, 2),
-(19, 3, 10, '2016-04-05 06:29:40', 1, NULL, NULL, 2),
-(20, 9, 10, '2016-04-07 06:51:09', 1, NULL, NULL, 2),
-(21, 8, 10, '2016-04-07 06:50:38', 1, NULL, NULL, 2),
-(22, 8, 10, '2016-04-07 06:50:25', 0, NULL, NULL, 2),
-(24, 6, 10, '2016-04-05 06:16:04', 0, 4, 6, 2),
-(25, 6, 10, '2016-04-05 06:16:12', 0, 4, 7, 2);
+INSERT INTO `ticket` (`id`, `sector_id`, `user_id`, `booked_time`, `paid`, `seat_row`, `set_col`, `status`, `discount_id`) VALUES
+(14, 3, 10, '2016-04-11 18:36:10', 0, NULL, NULL, 2, 2),
+(15, 4, 10, '2016-04-11 16:54:39', 0, NULL, NULL, 2, 1),
+(17, 6, 10, '2016-04-11 16:54:39', 0, 5, 10, 2, 1),
+(18, 6, 10, '2016-04-11 16:54:39', 0, 5, 9, 2, 1),
+(19, 3, 10, '2016-04-11 16:54:39', 1, NULL, NULL, 2, 1),
+(20, 9, 10, '2016-04-11 16:54:39', 1, NULL, NULL, 2, 1),
+(21, 8, 10, '2016-04-11 16:54:39', 1, NULL, NULL, 2, 1),
+(22, 8, 10, '2016-04-11 18:09:40', 0, NULL, NULL, 2, 2),
+(24, 6, 10, '2016-04-11 18:07:18', 0, 4, 6, 2, 3),
+(25, 6, 10, '2016-04-11 16:54:40', 0, 4, 7, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -205,6 +230,12 @@ INSERT INTO `user` (`id`, `email`, `password`, `privilage`, `name`) VALUES
 --
 -- Indexek a kiírt táblákhoz
 --
+
+--
+-- A tábla indexei `discount`
+--
+ALTER TABLE `discount`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- A tábla indexei `event`
@@ -249,7 +280,8 @@ ALTER TABLE `ticket`
   ADD PRIMARY KEY (`id`),
   ADD KEY `event_id` (`sector_id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `sector_id` (`sector_id`);
+  ADD KEY `sector_id` (`sector_id`),
+  ADD KEY `FK_discount` (`discount_id`) USING BTREE;
 
 --
 -- A tábla indexei `user`
@@ -261,6 +293,11 @@ ALTER TABLE `user`
 -- A kiírt táblák AUTO_INCREMENT értéke
 --
 
+--
+-- AUTO_INCREMENT a táblához `discount`
+--
+ALTER TABLE `discount`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT a táblához `event`
 --
@@ -285,7 +322,7 @@ ALTER TABLE `sector`
 -- AUTO_INCREMENT a táblához `subscription`
 --
 ALTER TABLE `subscription`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT a táblához `ticket`
 --
@@ -324,6 +361,7 @@ ALTER TABLE `subscription`
 -- Megkötések a táblához `ticket`
 --
 ALTER TABLE `ticket`
+  ADD CONSTRAINT `FK_discount` FOREIGN KEY (`discount_id`) REFERENCES `discount` (`id`),
   ADD CONSTRAINT `FK_event_sctor` FOREIGN KEY (`sector_id`) REFERENCES `sector` (`id`),
   ADD CONSTRAINT `FK_user_ticket` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 

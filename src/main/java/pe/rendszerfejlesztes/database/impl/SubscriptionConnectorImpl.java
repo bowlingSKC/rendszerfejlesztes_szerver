@@ -1,9 +1,11 @@
-package pe.rendszerfejlesztes.services;
+package pe.rendszerfejlesztes.database.impl;
+
 
 import pe.rendszerfejlesztes.database.SubscriptionConnector;
 import pe.rendszerfejlesztes.modell.Event;
 import pe.rendszerfejlesztes.modell.Subscription;
 import pe.rendszerfejlesztes.modell.User;
+import pe.rendszerfejlesztes.services.EventServiceLocal;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -14,21 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
-public class SubscribeService implements SubscribeServiceLocal {
+public class SubscriptionConnectorImpl implements SubscriptionConnector {
     @PersistenceContext(unitName = "serverUnit")
     EntityManager em;
 
     @EJB
     private EventServiceLocal eventService;
 
-    @EJB
-    private SubscriptionConnector subscriptionConnector;
-
     @Override
     public Subscription subscribe(User user, Integer id){
-        return subscriptionConnector.subscribe(user,id);
-
-        /*List<Event> events = eventService.getAllEvents();
+        List<Event> events = eventService.getAllEvents();
         Event event = new Event();
         for(Event e : events){
             if(e.getId() == id){
@@ -38,13 +35,12 @@ public class SubscribeService implements SubscribeServiceLocal {
                 return subscription;
             }
         }
-        return null;*/
+        return null;
     }
 
     @Override
     public List<Subscription> getUserSubscription(User user){
-        return subscriptionConnector.getUserSubscription(user);
-        /*Query query = em.createQuery("SELECT subscription FROM Subscription subscription");
+        Query query = em.createQuery("SELECT subscription FROM Subscription subscription");
         List<Subscription> tempSubscriptions = query.getResultList();
         if( tempSubscriptions == null ) {
             return new ArrayList<>();
@@ -55,18 +51,16 @@ public class SubscribeService implements SubscribeServiceLocal {
                 subscriptions.add(sub);
             }
         }
-        return subscriptions;*/
+        return subscriptions;
     }
 
     @Override
     public List<Subscription> getAllSubscription(){
-        return subscriptionConnector.getAllSubscription();
-        /*Query query = em.createQuery("SELECT subscription FROM Subscription subscription");
+        Query query = em.createQuery("SELECT subscription FROM Subscription subscription");
         List<Subscription> subscriptions = query.getResultList();
         if( subscriptions == null ) {
             return new ArrayList<>();
         }
-        return subscriptions;*/
+        return subscriptions;
     }
-
 }

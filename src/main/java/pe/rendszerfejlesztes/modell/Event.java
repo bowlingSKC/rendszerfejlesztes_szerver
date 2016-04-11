@@ -84,6 +84,9 @@ public class Event {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
     private List<Sector> sectorList;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "event")
+    private List<Subscription> subscriptions;
+
     /**
      * Paraméter nélküli konstruktor.
      * Semmilyen értéket nem állít be az adattagoknak.
@@ -177,6 +180,10 @@ public class Event {
     public void setSeats(boolean seats) {
         this.seats = seats;
     }
+
+    public List<Subscription> getSubscriptions() {return subscriptions;}
+
+    public void setSubscriptions(List<Subscription> subscriptions) {this.subscriptions = subscriptions;}
 
     @Override
     public String toString() {

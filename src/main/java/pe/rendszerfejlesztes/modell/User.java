@@ -71,6 +71,9 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Ticket> tickets;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Subscription> subscriptions;
+
     /**
      * Paraméter nélküli konstruktor.
      * Semmilyen értéket nem állít be az adattagoknak.
@@ -164,6 +167,10 @@ public class User {
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
     }
+
+    public List<Subscription> getSubscriptions() {return subscriptions;}
+
+    public void setSubscriptions(List<Subscription> subscriptions) {this.subscriptions = subscriptions;}
 
     @Override
     public String toString() {

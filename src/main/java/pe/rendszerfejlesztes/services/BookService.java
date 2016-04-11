@@ -1,9 +1,12 @@
 package pe.rendszerfejlesztes.services;
 
+import pe.rendszerfejlesztes.database.DiscountConnector;
+import pe.rendszerfejlesztes.modell.Discount;
 import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,6 +32,9 @@ public class BookService implements BookingServiceLocal {
      */
     @PersistenceContext(unitName = "serverUnit")
     EntityManager em;
+
+    @EJB
+    private DiscountConnector discountConnector;
 
     /**
      * A paraméterben kapott felhasználó összes foglalt jegyeit keresi meg az adatbázisban.
@@ -127,5 +133,31 @@ public class BookService implements BookingServiceLocal {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean updateDiscount(Discount discount, Integer id){
+        return discountConnector.updateDiscount(discount,id);
+        /*Ticket found = (Ticket)em.createQuery("SELECT t FROM Ticket t WHERE t.id LIKE :ticid").setParameter("ticid",id).getSingleResult();
+        Ticket old = em.find(Ticket.class, id);
+        if(old != null){
+            System.out.println(discount);
+            System.out.println(old);
+            //em.remove(old);
+            old.setDiscount(discount);
+            //em.persist(old);
+            em.merge(old);
+            em.flush();
+            return true;
+        }
+
+        return false;*/
+    }
+
+    @Override
+    public List<Discount> getAllDiscount(){
+        return discountConnector.getAllDiscount();
+        /*List<Discount> discounts = em.createQuery("SELECT d FROM Discount d").getResultList();
+        return discounts;*/
     }
 }

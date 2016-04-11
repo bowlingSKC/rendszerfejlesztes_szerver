@@ -18,7 +18,7 @@ import java.util.Date;
 @Table(name = "ticket")
 public class Ticket {
 
-    /**
+     /**
      * A jegyhez tartozó elsődleges kulcs az adatbázisban.
      */
     @Id
@@ -80,6 +80,10 @@ public class Ticket {
     @Column(name = "status")
     private Integer status;
 
+    @JoinColumn(name = "discount_id", referencedColumnName = "id")
+    @ManyToOne
+    private Discount discount;
+
     /**
      * Paraméter nélküli konstruktor.
      * Semmilyen értéket nem állít be az adattagoknak.
@@ -106,6 +110,17 @@ public class Ticket {
         this.row = row;
         this.col = col;
         this.status = status;
+    }
+
+    public Ticket(Sector sector, User user, Date bookedTime, boolean paid, Integer row, Integer col, Integer status, Discount discount) {
+        this.sector = sector;
+        this.user = user;
+        this.bookedTime = bookedTime;
+        this.paid = paid;
+        this.row = row;
+        this.col = col;
+        this.status = status;
+        this.discount = discount;
     }
 
     /**
@@ -189,6 +204,10 @@ public class Ticket {
         this.status = status;
     }
 
+    public Discount getDiscount() {return discount;}
+
+    public void setDiscount(Discount discount) {this.discount = discount;}
+
     @Override
     public String toString() {
         return "Ticket{" +
@@ -200,6 +219,7 @@ public class Ticket {
                 ", row=" + row +
                 ", col=" + col +
                 ", status=" + status +
+                ", discount=" + discount +
                 '}';
     }
 }

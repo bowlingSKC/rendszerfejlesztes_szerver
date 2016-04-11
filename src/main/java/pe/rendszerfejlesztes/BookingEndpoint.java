@@ -2,6 +2,7 @@ package pe.rendszerfejlesztes;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import pe.rendszerfejlesztes.modell.Discount;
 import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
@@ -87,6 +88,28 @@ public class BookingEndpoint {
         }
         System.out.println("Sikeres jegy foglalas!");
         return Response.ok().build();
+    }
+
+    @POST
+    @Produces("application/json")
+    @Path("updateDiscount/{id}")
+    public Response updateDiscount(Discount discount, @PathParam("id") Integer id) {
+        System.out.println( "Erkezett: " + discount.toString() + " - " + id.toString() );
+        if(bookingService.updateDiscount(discount,id)){
+            return Response.ok().build();
+        }else{
+            return Response.serverError().build();
+        }
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("getAllDiscount")
+    public Response getAllDiscount() {
+        System.out.println( "Keres erkezett: osszes kedvezmeny lekerdezese" );
+        List<Discount> events = bookingService.getAllDiscount();
+        GenericEntity<List<Discount>> discountWrapper = new GenericEntity<List<Discount>>(events) {};
+        return Response.ok(discountWrapper).build();
     }
 
 }

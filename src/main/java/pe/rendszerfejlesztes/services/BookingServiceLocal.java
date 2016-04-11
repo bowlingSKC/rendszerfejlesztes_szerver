@@ -1,5 +1,6 @@
 package pe.rendszerfejlesztes.services;
 
+import pe.rendszerfejlesztes.modell.Discount;
 import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
@@ -40,5 +41,9 @@ public interface BookingServiceLocal {
      * @return a jegyhez tartozó szektor
      */
     Sector getSectorByTicket(Ticket ticket);
+
+    boolean updateDiscount(Discount discount, Integer id);
+
+    List<Discount> getAllDiscount();
 
 }
