@@ -11,8 +11,7 @@ import java.util.List;
 
 @Stateless
 public class DiscountConnectorImpl implements DiscountConnector{
-    @PersistenceContext(unitName = "serverUnit")
-    EntityManager em;
+    EntityManager em = EmFactory.getEntityManager();
 
     @Override
     public boolean updateDiscount(Discount discount, Integer id){
@@ -23,9 +22,11 @@ public class DiscountConnectorImpl implements DiscountConnector{
             System.out.println(old);
             //em.remove(old);
             old.setDiscount(discount);
+            System.out.println(old);
             //em.persist(old);
-            em.merge(old);
-            em.flush();
+            em.refresh(old);
+            //em.merge(old);
+            //em.flush();
             return true;
         }
 

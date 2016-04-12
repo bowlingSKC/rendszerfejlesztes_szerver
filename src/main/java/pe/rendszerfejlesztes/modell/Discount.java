@@ -27,9 +27,9 @@ public class Discount {
     @Column(name = "value")
     private Double value;
 
-    @XmlTransient
+    /*@XmlTransient
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "discount")
-    private List<Ticket> tickets;
+    private List<Ticket> tickets;*/
 
     public Discount() {
     }

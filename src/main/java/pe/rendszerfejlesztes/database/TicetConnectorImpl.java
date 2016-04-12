@@ -3,6 +3,7 @@ package pe.rendszerfejlesztes.database;
 import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.QueryHints;
 import pe.rendszerfejlesztes.database.TicketConnector;
+import pe.rendszerfejlesztes.modell.Discount;
 import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
@@ -37,6 +38,7 @@ public class TicetConnectorImpl implements TicketConnector {
 
         User user = em.find(User.class, ticket.getUser().getId());
         Sector sector = em.find(Sector.class, ticket.getSector().getId());
+        ticket.setDiscount(em.find(Discount.class, 1));
         em.refresh(user);
         em.refresh(sector);
 
