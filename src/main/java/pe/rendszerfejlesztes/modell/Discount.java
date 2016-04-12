@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -24,6 +26,10 @@ public class Discount {
     @Basic(optional = false)
     @Column(name = "value")
     private Double value;
+
+    @XmlTransient
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "discount")
+    private List<Ticket> tickets;
 
     public Discount() {
     }

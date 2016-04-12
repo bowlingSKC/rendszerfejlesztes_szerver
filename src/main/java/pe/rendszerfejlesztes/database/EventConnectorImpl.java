@@ -1,4 +1,4 @@
-package pe.rendszerfejlesztes.database.impl;
+package pe.rendszerfejlesztes.database;
 
 import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.QueryHints;
@@ -15,8 +15,7 @@ import java.util.List;
 @Stateless
 public class EventConnectorImpl implements EventConnector {
 
-    @PersistenceContext(unitName = "serverUnit")
-    EntityManager em;
+    EntityManager em = EmFactory.getEntityManager();
 
     @Override
     public List<Event> getAllEvents() {

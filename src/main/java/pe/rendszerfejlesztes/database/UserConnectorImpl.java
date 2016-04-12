@@ -1,20 +1,19 @@
-package pe.rendszerfejlesztes.database.impl;
+package pe.rendszerfejlesztes.database;
 
 import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.QueryHints;
 import pe.rendszerfejlesztes.database.UserConnector;
 import pe.rendszerfejlesztes.modell.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.ejb.Stateless;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Stateless
 public class UserConnectorImpl implements UserConnector {
 
-    @PersistenceContext(unitName = "serverUnit")
-    EntityManager em;
+    EntityManager em = EmFactory.getEntityManager();
 
     @Override
     public User createUser(User user) {

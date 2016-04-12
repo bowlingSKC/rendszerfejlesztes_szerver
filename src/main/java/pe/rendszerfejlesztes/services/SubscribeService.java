@@ -1,30 +1,24 @@
 package pe.rendszerfejlesztes.services;
 
 import pe.rendszerfejlesztes.database.SubscriptionConnector;
+import pe.rendszerfejlesztes.database.SubscriptionConnectorImpl;
 import pe.rendszerfejlesztes.modell.Event;
 import pe.rendszerfejlesztes.modell.Subscription;
 import pe.rendszerfejlesztes.modell.User;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-@Stateless
-public class SubscribeService implements SubscribeServiceLocal {
-    @PersistenceContext(unitName = "serverUnit")
-    EntityManager em;
+public class SubscribeService  {
 
-    @EJB
-    private EventServiceLocal eventService;
+    private SubscriptionConnector subscriptionConnector = new SubscriptionConnectorImpl();
 
-    @EJB
-    private SubscriptionConnector subscriptionConnector;
-
-    @Override
     public Subscription subscribe(User user, Integer id){
         return subscriptionConnector.subscribe(user,id);
 
@@ -41,7 +35,6 @@ public class SubscribeService implements SubscribeServiceLocal {
         return null;*/
     }
 
-    @Override
     public List<Subscription> getUserSubscription(User user){
         return subscriptionConnector.getUserSubscription(user);
         /*Query query = em.createQuery("SELECT subscription FROM Subscription subscription");
@@ -58,7 +51,6 @@ public class SubscribeService implements SubscribeServiceLocal {
         return subscriptions;*/
     }
 
-    @Override
     public List<Subscription> getAllSubscription(){
         return subscriptionConnector.getAllSubscription();
         /*Query query = em.createQuery("SELECT subscription FROM Subscription subscription");
@@ -69,4 +61,8 @@ public class SubscribeService implements SubscribeServiceLocal {
         return subscriptions;*/
     }
 
+    public Event getSubscriptionByEventId(Integer id) {
+        subscriptionConnector.getSubscriptionByEventId(id);
+        return null;
+    }
 }

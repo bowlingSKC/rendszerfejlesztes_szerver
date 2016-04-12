@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "subscription")
 public class Subscription {
+
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

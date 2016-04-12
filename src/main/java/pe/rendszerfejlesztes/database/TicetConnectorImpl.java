@@ -1,4 +1,4 @@
-package pe.rendszerfejlesztes.database.impl;
+package pe.rendszerfejlesztes.database;
 
 import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.QueryHints;
@@ -7,16 +7,17 @@ import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+@Stateless
 public class TicetConnectorImpl implements TicketConnector {
 
-    @PersistenceContext(unitName = "serverUnit")
-    EntityManager em;
+    EntityManager em = EmFactory.getEntityManager();
 
     @Override
     public List<Ticket> getTicketsByUserId(Integer userId) {
@@ -61,5 +62,15 @@ public class TicetConnectorImpl implements TicketConnector {
         db.setPaid(true);
         em.refresh(db);
         em.flush();
+    }
+
+    @Override
+    public List<Ticket> getAllTicket() {
+        Query query = em.createQuery("SELECT ticket FROM Ticket ticket");
+        List<Ticket> tickets = query.getResultList();
+        if( tickets == null ) {
+            return new ArrayList<>();
+        }
+        return tickets;
     }
 }

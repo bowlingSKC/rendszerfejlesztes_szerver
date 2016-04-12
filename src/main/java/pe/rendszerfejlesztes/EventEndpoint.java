@@ -1,16 +1,18 @@
 package pe.rendszerfejlesztes;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import pe.rendszerfejlesztes.database.EventConnector;
 import pe.rendszerfejlesztes.modell.*;
-import pe.rendszerfejlesztes.services.EventServiceLocal;
-import pe.rendszerfejlesztes.services.LocationServiceLocal;
-import pe.rendszerfejlesztes.services.SubscribeServiceLocal;
+import pe.rendszerfejlesztes.services.BookService;
+import pe.rendszerfejlesztes.services.EventService;
+import pe.rendszerfejlesztes.services.LocationService;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,30 +24,10 @@ import java.util.List;
 @Path("event")
 public class EventEndpoint {
 
-    /**
-     * A helyszínek kezelését szolgáló EJB.
-     * @see pe.rendszerfejlesztes.services.EventServiceLocal
-     */
-    @EJB
-    private LocationServiceLocal locationService;
+    private EventService eventService = new EventService();
+    private LocationService locationService = new LocationService();
+    private BookService bookService = new BookService();
 
-    @EJB
-    private EventConnector eventConnector;
-
-    /**
-     * Az események kezelését szolgáló EJB.
-     * @see pe.rendszerfejlesztes.services.EventServiceLocal
-     */
-    @EJB
-    private EventServiceLocal eventService;
-
-    /**
-     * Az adatbázisban található összes helyeszín listáját adja vissza JSON formátumban.
-     * <p>
-     *     Elérése GET hívással: /api/event/locations
-     * </p>
-     * @return az összes helyszín listjája
-     */
     @GET
     @Path("locations")
     @Produces("application/json")
@@ -68,7 +50,7 @@ public class EventEndpoint {
     public Response getAllEvents() {
         System.out.println( "Keres erkezett: osszes esemeny lekerdezese" );
         //List<Event> events = eventService.getAllEvents();
-        List<Event> events = eventConnector.getAllEvents();
+        List<Event> events = eventService.getAllEvents();
         GenericEntity<List<Event>> locationWrapper = new GenericEntity<List<Event>>(events) {};
         return Response.ok(locationWrapper).build();
     }
@@ -98,13 +80,6 @@ public class EventEndpoint {
         return Response.ok(sectorsWrapper).build();
     }
 
-    @GET
-    @Produces("application/json")
-    @Path("bysubscription/{id}")
-    public Response getSubscriptionByEventId(@PathParam("id") Integer id) {
-        Event event = eventService.getSubscriptionByEventId(id);
-        return Response.ok(event).build();
-    }
 
     @POST
     @Produces("application/json")
@@ -113,6 +88,17 @@ public class EventEndpoint {
         Event event = eventService.getEventBySector(sector);
         System.out.println("A keresett esemeny szektor szerint: " + event);
         return Response.ok(event).build();
+    }
+
+    @POST
+    @Produces("application/json")
+    @Path("sectors/byticket")
+    public Response getSectorByTicket(String ticket) {
+        System.out.println( ticket );
+        Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new GsonUTCdateAdapter()).create();
+        Ticket obj = gson.fromJson(ticket, Ticket.class);
+        Sector sector = bookService.getSectorByTicket(obj);
+        return Response.ok(sector).build();
     }
 
 }

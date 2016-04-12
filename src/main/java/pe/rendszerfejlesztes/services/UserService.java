@@ -1,123 +1,51 @@
 package pe.rendszerfejlesztes.services;
 
+import pe.rendszerfejlesztes.database.TicetConnectorImpl;
+import pe.rendszerfejlesztes.database.TicketConnector;
+import pe.rendszerfejlesztes.database.UserConnector;
+import pe.rendszerfejlesztes.database.UserConnectorImpl;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.ArrayList;
+import javax.inject.Named;
 import java.util.List;
 
-/**
- * A {@link pe.rendszerfejlesztes.services.UserServiceLocal} egy implementált osztálya relációs adatbázisok perzisztens rétegének megvalósításához.
- * Az osztály egyben egy állapot nélküli EJB is.
- * @see pe.rendszerfejlesztes.modell.User
- */
-@Stateless
-public class UserService implements UserServiceLocal {
 
-    /**
-     * Adatbázist megvalósító osztály.
-     * Ezen adattagon kereszül kell az adatbázis-műveleteket megvalósítani.
-     * <p>
-     *     A PersistenceContex annotáció unitName mezőjének az értéke a persistence.xml fájlban van definiálva.
-     * </p>
-     */
-    @PersistenceContext(unitName = "serverUnit")
-    EntityManager em;
+public class UserService {
 
-    /**
-     * Felhasználó elmentése az adatbátisba.
-     * @param newUser a menteni kívánt felhasználó
-     * @return a perzisztens felhasználó
-     */
-    @Override
+
+    private UserConnector userConnector = new UserConnectorImpl();
+    private TicketConnector ticketConnector = new TicetConnectorImpl();
+
     public User createUser(User newUser) {
-        em.persist(newUser);
+        List<User> users = userConnector.searchUser(newUser);
+        if( users.size() != 0 ) {
+            return null;
+        }
+
+        userConnector.createUser(newUser);
         return newUser;
     }
 
-    /**
-     * Bejelentkezés ellenőrzése.
-     * @param email a felhasználó által megadott E-mail cím
-     * @param pswd a felhasználó által megadott jelszó
-     * @return sikeres bejelentkezés esetén az E-mail címhez tartozó felhasználó, ellenkező esetben null
-     */
-    @Override
     public User login(String email, String pswd) {
-        Query query = em.createQuery("SELECT user FROM User user WHERE user.email LIKE :email AND user.password LIKE :pswd");
-        query.setParameter("email", email);
-        query.setParameter("pswd", pswd);
-
-        User logged;
-        try {
-            logged = (User) query.getSingleResult();
-        } catch (NoResultException ex) {
-            logged = null;
-        }
-
-        return logged;
+        User login = userConnector.login(email, pswd);
+        return login;
     }
 
-    /**
-     * Az összes felhasználó lekérdezése az adatbázisból.
-     * @return a regisztrált felhasználók listája
-     */
-    @Override
     public List<User> listUsers() {
-        Query query = em.createQuery("SELECT user FROM User user");
-        List<User> users = query.getResultList();
-        if( users == null ) {
-            return new ArrayList<>();
-        }
+        List<User> users = userConnector.listUsers();
         return users;
     }
 
-    /**
-     * Felhasználók keresése az adatbázisban a megadott szempontok szerint.
-     * @param user keresési feltételek
-     * @return a keresési feltételeknek megfelelő felhasználók listája
-     */
-    @Override
     public List<User> searchUser(User user) {
-        Query query;
-        if( !user.getName().equals("") && !user.getEmail().equals("") ) {
-            query = em.createQuery("SELECT user FROM User user WHERE user.email LIKE :email AND user.name LIKE :name");
-            query.setParameter("email", "%" + user.getEmail() + "%");
-            query.setParameter("name", "%" + user.getName() + "%");
-        } else if( !user.getName().equals("") ) {
-            query = em.createQuery("SELECT user FROM User user WHERE user.name LIKE :name");
-            query.setParameter("name", "%" + user.getName() + "%");
-        } else if( !user.getEmail().equals("") ) {
-            query = em.createQuery("SELECT user FROM User user WHERE user.email LIKE :email");
-            query.setParameter("email", "%" + user.getEmail() + "%");
-        } else {
-            return listUsers();
-        }
-        List<User> users = query.getResultList();
-        if( users == null ) {
-            return new ArrayList<>();
-        }
+        List<User> users = userConnector.searchUser(user);
         return users;
     }
 
-    /**
-     * A megadott jegyet állítja át fizetettre.
-     * @return az átállított jegy
-     */
-    @Override
     public Ticket setTicketPaid(Ticket ticket){
-        Query query = em.createQuery("SELECT ticket FROM Ticket ticket");
-        List<Ticket> tickets = query.getResultList();
-        for(Ticket tic : tickets){
-            if (tic.getId() == ticket.getId()){
-                tic.setPaid(true);
-                return tic;
-            }
-        }
-        return null;
+        ticketConnector.setTicketPaid(ticket);
+        return ticket;
     }
 }

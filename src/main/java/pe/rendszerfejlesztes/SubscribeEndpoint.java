@@ -1,8 +1,9 @@
 package pe.rendszerfejlesztes;
 
+import pe.rendszerfejlesztes.modell.Event;
 import pe.rendszerfejlesztes.modell.Subscription;
 import pe.rendszerfejlesztes.modell.User;
-import pe.rendszerfejlesztes.services.SubscribeServiceLocal;
+import pe.rendszerfejlesztes.services.SubscribeService;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -13,8 +14,7 @@ import java.util.List;
 @Path("subscribe")
 public class SubscribeEndpoint {
 
-    @EJB
-    private SubscribeServiceLocal subscribeService;
+    private SubscribeService subscribeService = new SubscribeService();
 
     @POST
     @Produces("application/json")
@@ -34,6 +34,15 @@ public class SubscribeEndpoint {
         List<Subscription> subscriptions = subscribeService.getUserSubscription(user);
         GenericEntity<List<Subscription>> subscriptionWrapper = new GenericEntity<List<Subscription>>(subscriptions) {};
         return Response.ok(subscriptionWrapper).build();
+    }
+
+
+    @GET
+    @Produces("application/json")
+    @Path("bysubscription/{id}")
+    public Response getSubscriptionByEventId(@PathParam("id") Integer id) {
+        Event event = subscribeService.getSubscriptionByEventId(id);
+        return Response.ok(event).build();
     }
 
 }

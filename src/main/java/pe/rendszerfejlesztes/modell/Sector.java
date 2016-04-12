@@ -96,6 +96,25 @@ public class Sector {
         this.depth = depth;
     }
 
+    public boolean isFull() {
+        if( tickets.size() == numOfCols * numOfRows ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isSeatReserved(int col, int row) {
+        if( event.isSeats() ) {
+            for(Ticket ticket : tickets) {
+                if( ticket.getCol().equals(col) && ticket.getRow().equals(row) ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public Integer getId() {
         return id;
     }

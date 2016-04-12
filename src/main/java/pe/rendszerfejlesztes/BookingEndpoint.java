@@ -6,7 +6,7 @@ import pe.rendszerfejlesztes.modell.Discount;
 import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
-import pe.rendszerfejlesztes.services.BookingServiceLocal;
+import pe.rendszerfejlesztes.services.BookService;
 
 import javax.ejb.EJB;
 import javax.ws.rs.*;
@@ -24,9 +24,7 @@ import java.util.List;
 @Path("booking")
 public class BookingEndpoint {
 
-    @EJB
-    private BookingServiceLocal bookingService;
-
+    private BookService bookService = new BookService();
 
     /**
      * A paraméterben megadott felhasználó összes jegyét adja vissza.
@@ -36,7 +34,8 @@ public class BookingEndpoint {
     @POST
     @Produces("application/json")
     public Response getTicketByUser(User user) {
-        List<Ticket> tickets = bookingService.getUserTicket(user);
+        System.out.println("Keres erkezett");
+        List<Ticket> tickets = bookService.getUserTicket(user);
         GenericEntity<List<Ticket>> ticketsWrapper = new GenericEntity<List<Ticket>>(tickets) {};
         return Response.ok(ticketsWrapper).build();
     }
@@ -51,26 +50,13 @@ public class BookingEndpoint {
     @Path("delete")
     public Response deleteTicket(Ticket ticket) {
         System.out.println(ticket);
-        boolean state = bookingService.deleteTicket(ticket);
-        if(state){
-            return Response.ok().build();
-        }else{
+        boolean state = bookService.deleteTicket(ticket);
+        if (state) {
+            return Response.ok(ticket).build();
+        } else {
             return Response.serverError().build();
         }
 
-    }
-
-    /**
-     * Megadott jegyhez visszaadja a hozzá tartozó szektort.
-     * @param ticket a jegy
-     * @return a jegyhez tartozó szektor
-     */
-    @POST
-    @Produces("application/json")
-    @Path("sectors")
-    public Response getSectorByTicket(Ticket ticket) {
-        Sector sector = bookingService.getSectorByTicket(ticket);
-        return Response.ok(sector).build();
     }
 
     @PUT
@@ -81,7 +67,7 @@ public class BookingEndpoint {
 
         Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new GsonUTCdateAdapter()).create();
         Ticket obj = gson.fromJson(ticket, Ticket.class);
-        Ticket booked = bookingService.bookTicket(obj);
+        Ticket booked = bookService.bookTicket(obj);
 
         if( booked == null ) {
             return Response.serverError().build();
@@ -95,7 +81,7 @@ public class BookingEndpoint {
     @Path("updateDiscount/{id}")
     public Response updateDiscount(Discount discount, @PathParam("id") Integer id) {
         System.out.println( "Erkezett: " + discount.toString() + " - " + id.toString() );
-        if(bookingService.updateDiscount(discount,id)){
+        if(bookService.updateDiscount(discount,id)){
             return Response.ok().build();
         }else{
             return Response.serverError().build();
@@ -107,7 +93,7 @@ public class BookingEndpoint {
     @Path("getAllDiscount")
     public Response getAllDiscount() {
         System.out.println( "Keres erkezett: osszes kedvezmeny lekerdezese" );
-        List<Discount> events = bookingService.getAllDiscount();
+        List<Discount> events = bookService.getAllDiscount();
         GenericEntity<List<Discount>> discountWrapper = new GenericEntity<List<Discount>>(events) {};
         return Response.ok(discountWrapper).build();
     }

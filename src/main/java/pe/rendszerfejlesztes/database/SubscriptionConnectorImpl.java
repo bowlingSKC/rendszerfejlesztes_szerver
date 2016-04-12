@@ -1,13 +1,10 @@
-package pe.rendszerfejlesztes.database.impl;
+package pe.rendszerfejlesztes.database;
 
 
-import pe.rendszerfejlesztes.database.SubscriptionConnector;
 import pe.rendszerfejlesztes.modell.Event;
 import pe.rendszerfejlesztes.modell.Subscription;
 import pe.rendszerfejlesztes.modell.User;
-import pe.rendszerfejlesztes.services.EventServiceLocal;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,15 +14,14 @@ import java.util.List;
 
 @Stateless
 public class SubscriptionConnectorImpl implements SubscriptionConnector {
-    @PersistenceContext(unitName = "serverUnit")
-    EntityManager em;
 
-    @EJB
-    private EventServiceLocal eventService;
+    EntityManager em = EmFactory.getEntityManager();
+
+    private EventConnector eventConnector = new EventConnectorImpl();
 
     @Override
     public Subscription subscribe(User user, Integer id){
-        List<Event> events = eventService.getAllEvents();
+        List<Event> events = eventConnector.getAllEvents();
         Event event = new Event();
         for(Event e : events){
             if(e.getId() == id){
@@ -62,5 +58,13 @@ public class SubscriptionConnectorImpl implements SubscriptionConnector {
             return new ArrayList<>();
         }
         return subscriptions;
+    }
+
+    @Override
+    public Event getSubscriptionByEventId(Integer id) {
+        Query query = em.createQuery("SELECT sub FROM Subscription sub WHERE sub.event.id = :id");
+        query.setParameter("id", id);
+        Event result = (Event) query.getSingleResult();
+        return result;
     }
 }

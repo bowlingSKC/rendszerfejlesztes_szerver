@@ -1,4 +1,4 @@
-package pe.rendszerfejlesztes.database.impl;
+package pe.rendszerfejlesztes.database;
 
 import pe.rendszerfejlesztes.database.DiscountConnector;
 import pe.rendszerfejlesztes.modell.Discount;

@@ -2,9 +2,8 @@ package pe.rendszerfejlesztes;
 
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
-import pe.rendszerfejlesztes.services.UserServiceLocal;
+import pe.rendszerfejlesztes.services.UserService;
 
-import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
@@ -19,12 +18,7 @@ import java.util.List;
 @Path("user")
 public class UserEndpoint {
 
-    /**
-     * A felhasználók kezelését szolgáló EJB.
-     * @see pe.rendszerfejlesztes.services.UserServiceLocal
-     */
-    @EJB
-    private UserServiceLocal userService;
+    private UserService userService = new UserService();
 
     /**
      * Új regisztráció elmentése adatbázisba.
@@ -39,7 +33,6 @@ public class UserEndpoint {
     @Produces("application/json")
     public Response registerUser(User newUser) {
         User created = userService.createUser(newUser);
-        System.out.println("Sikeres regisztracio tortent! " + created);
         return Response.ok(created).build();
     }
 
@@ -52,7 +45,6 @@ public class UserEndpoint {
     @Produces("application/json")
     @Path("search")
     public Response searchUser(User user) {
-        System.out.println("Keresesi feltetelek: " + user);
         List<User> users = userService.searchUser(user);
         GenericEntity<List<User>> usersWrapper = new GenericEntity<List<User>>(users) {};
         return Response.ok(usersWrapper).build();
@@ -73,27 +65,9 @@ public class UserEndpoint {
     @Produces("application/json")
     @Path("{email}/{pswd}")
     public Response login(@PathParam("email") String email, @PathParam("pswd") String pswd) {
-        System.out.println( "Keres erkezett: bejelentkezes" );
         User user = userService.login(email, pswd);
-        if( user == null ) {
-            System.out.println( "A bejelentkezes nem sikerult" );
-        } else {
-            System.out.println("A bejelentkezes sikerult: " + user);
-        }
         return Response.ok(user).build();
     }
-
-    /**
-     * Adatbázisból visszaadja a felhasználót friss adatokkal.
-     * @return a paraméterben megadott felhasználó
-     */
-    /*@POST
-    @Produces("application/json")
-    @Path("update")
-    public Response update(User user) {
-        User usr = userService.updateUser(user);
-        return Response.ok(usr).build();
-    }*/
 
     /**
      * Adatbázisból visszaadja az összes regisztrált felhasználót.
@@ -102,7 +76,6 @@ public class UserEndpoint {
     @GET
     @Produces("application/json")
     public Response login() {
-        System.out.println( "Keres erkezett: felhasznalok lekerese" );
         List<User> users = userService.listUsers();
         GenericEntity<List<User>> usersWrapper = new GenericEntity<List<User>>(users) {};
         return Response.ok(usersWrapper).build();
@@ -116,8 +89,8 @@ public class UserEndpoint {
     @Path("paid")
     @Produces("application/json")
     public Response setPaidTicket(Ticket ticket) {
-        Ticket back = userService.setTicketPaid(ticket);
-        return Response.ok(back).build();
+        userService.setTicketPaid(ticket);
+        return Response.ok(ticket).build();
     }
 
 }
