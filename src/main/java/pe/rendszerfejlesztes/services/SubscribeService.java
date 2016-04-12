@@ -62,7 +62,6 @@ public class SubscribeService  {
     }
 
     public Event getSubscriptionByEventId(Integer id) {
-        subscriptionConnector.getSubscriptionByEventId(id);
-        return null;
+        return subscriptionConnector.getSubscriptionByEventId(id);
     }
 }

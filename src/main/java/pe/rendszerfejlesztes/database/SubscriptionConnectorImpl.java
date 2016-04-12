@@ -27,7 +27,9 @@ public class SubscriptionConnectorImpl implements SubscriptionConnector {
             if(e.getId() == id){
                 event = e;
                 Subscription subscription = new Subscription(user,event);
+                em.getTransaction().begin();
                 em.persist(subscription);
+                em.getTransaction().commit();
                 return subscription;
             }
         }
@@ -62,9 +64,22 @@ public class SubscriptionConnectorImpl implements SubscriptionConnector {
 
     @Override
     public Event getSubscriptionByEventId(Integer id) {
-        Query query = em.createQuery("SELECT sub FROM Subscription sub WHERE sub.event.id = :id");
+        /*Query query = em.createQuery("SELECT sub FROM Subscription sub WHERE sub.event.id = :id");
         query.setParameter("id", id);
-        Event result = (Event) query.getSingleResult();
-        return result;
+        Event result = (Event) query.getSingleResult();*/
+
+        List<Event> events =  em.createQuery("SELECT event FROM Event event").getResultList();
+        List<Subscription> subscriptions = getAllSubscription();
+        for(Subscription s : subscriptions){
+            if(s.getId() == id){
+                for(Event e : events){
+                    if(e.getId() == s.getEvent().getId()){
+                           return e;
+                    }
+                }
+            }
+        }
+        return null;
+        //return result;
     }
 }
