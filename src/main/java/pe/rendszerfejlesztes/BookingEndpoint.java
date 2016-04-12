@@ -3,12 +3,10 @@ package pe.rendszerfejlesztes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import pe.rendszerfejlesztes.modell.Discount;
-import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
 import pe.rendszerfejlesztes.services.BookService;
 
-import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
@@ -67,9 +65,12 @@ public class BookingEndpoint {
 
         Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new GsonUTCdateAdapter()).create();
         Ticket obj = gson.fromJson(ticket, Ticket.class);
+        System.out.println(obj);
+
         Ticket booked = bookService.bookTicket(obj);
 
         if( booked == null ) {
+            System.out.println("SERVER ERROR - NULL VALUE");
             return Response.serverError().build();
         }
         System.out.println("Sikeres jegy foglalas!");

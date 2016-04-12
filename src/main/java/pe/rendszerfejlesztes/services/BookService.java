@@ -31,7 +31,7 @@ public class BookService {
     }
 
     private Ticket bookNonSeatedTicket(Ticket ticket) {
-        Sector sector = sectorConnector.getSectorByTicketId(ticket.getId());
+        Sector sector = sectorConnector.getSectorById(ticket.getSector().getId());
         if( sector == null ) {
             return null;
         }
@@ -45,7 +45,7 @@ public class BookService {
     }
 
     private Ticket bookSeatedTicket(Ticket ticket) {
-        Sector sector = sectorConnector.getSectorByTicketId(ticket.getId());
+        Sector sector = sectorConnector.getSectorById(ticket.getSector().getId());
         if( sector == null ) {
             return null;
         }

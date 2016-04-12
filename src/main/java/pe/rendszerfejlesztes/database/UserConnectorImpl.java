@@ -25,7 +25,12 @@ public class UserConnectorImpl implements UserConnector {
         Query query = em.createQuery("SELECT user FROM User user WHERE user.email LIKE :email AND user.password LIKE :passwd").setHint(QueryHints.CACHE_USAGE, CacheUsage.DoNotCheckCache);
         query.setParameter("email", email);
         query.setParameter("passwd", password);
-        User user = (User) query.getSingleResult();
+        User user = null;
+        try {
+            user = (User) query.getSingleResult();
+        } catch (Exception ex) {
+            // nincs ilyen user
+        }
         return user;
     }
 

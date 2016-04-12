@@ -10,4 +10,6 @@ public interface SectorConnector {
 
     Sector getSectorByTicketId(Integer id);
     List<Sector> getSectorByEventId(Integer id);
+
+    Sector getSectorById(Integer id);
 }

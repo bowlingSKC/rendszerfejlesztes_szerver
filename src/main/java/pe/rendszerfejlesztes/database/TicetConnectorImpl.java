@@ -34,6 +34,7 @@ public class TicetConnectorImpl implements TicketConnector {
 
     @Override
     public Ticket bookTicket(Ticket ticket) {
+        em.getTransaction().begin();
         em.persist(ticket);
 
         User user = em.find(User.class, ticket.getUser().getId());
@@ -43,6 +44,7 @@ public class TicetConnectorImpl implements TicketConnector {
         em.refresh(sector);
 
         em.flush();
+        em.getTransaction().commit();
         return ticket;
     }
 
