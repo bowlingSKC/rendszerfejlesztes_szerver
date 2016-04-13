@@ -68,7 +68,7 @@ public class SubscriptionConnectorImpl implements SubscriptionConnector {
         query.setParameter("id", id);
         Event result = (Event) query.getSingleResult();*/
 
-        List<Event> events =  em.createQuery("SELECT event FROM Event event").getResultList();
+        List<Event> events =  eventConnector.getAllEvents();
         List<Subscription> subscriptions = getAllSubscription();
         for(Subscription s : subscriptions){
             if(s.getId() == id){
@@ -81,5 +81,32 @@ public class SubscriptionConnectorImpl implements SubscriptionConnector {
         }
         return null;
         //return result;
+    }
+
+    @Override
+    public boolean unSubscribe(Subscription subscription){
+        try{
+            subscription = em.find(Subscription.class, subscription.getId());
+            em.getTransaction().begin();
+            em.remove(subscription);
+            em.refresh(em.find(User.class,subscription.getUser().getId()));
+            em.flush();
+            em.getTransaction().commit();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isSubscribed(Event event, Integer id){
+        List<Subscription> subscriptions = getAllSubscription();
+        for(Subscription sub : subscriptions){
+            if(sub.getUser().getId() == id && sub.getEvent().getId() == event.getId()){
+                return true;
+            }
+        }
+        return false;
     }
 }

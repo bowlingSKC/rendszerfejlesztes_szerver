@@ -45,4 +45,29 @@ public class SubscribeEndpoint {
         return Response.ok(event).build();
     }
 
+    @POST
+    @Path("unsubscribe")
+    @Produces("application/json")
+    public Response unSubscribe(Subscription subscription) {
+        System.out.println( "Keres erkezett leiratkozasra:" + subscription.toString() );
+         if(subscribeService.unSubscribe(subscription)){
+            return Response.ok().build();
+        }else{
+            return Response.serverError().build();
+        }
+    }
+
+    @POST
+    @Produces("application/json")
+    @Path("issubscribed/{id}")
+    public Response subscribe(Event event, @PathParam("id") Integer id) {
+        System.out.println("HERE2");
+        System.out.println( "IsSubscrube keres: " + event.toString() + " - " + id.toString() );
+        if(subscribeService.isSubscribed(event, id)){
+            return Response.ok().build();
+        }else{
+            return Response.serverError().build();
+        }
+    }
+
 }

@@ -64,4 +64,12 @@ public class SubscribeService  {
     public Event getSubscriptionByEventId(Integer id) {
         return subscriptionConnector.getSubscriptionByEventId(id);
     }
+
+    public boolean unSubscribe(Subscription subscription){
+        return subscriptionConnector.unSubscribe(subscription);
+    }
+
+    public boolean isSubscribed(Event event, Integer id){
+        return  subscriptionConnector.isSubscribed(event, id);
+    }
 }

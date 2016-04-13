@@ -13,6 +13,7 @@ public interface SubscriptionConnector {
     Subscription subscribe(User user, Integer id);
     List<Subscription> getUserSubscription(User user);
     List<Subscription> getAllSubscription();
-
+    boolean unSubscribe(Subscription subscription);
     Event getSubscriptionByEventId(Integer id);
+    boolean isSubscribed(Event event, Integer id);
 }
