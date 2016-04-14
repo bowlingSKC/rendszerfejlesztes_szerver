@@ -1,7 +1,8 @@
-package pe.rendszerfejlesztes.database;
+package pe.rendszerfejlesztes.database.impl;
 
 import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.QueryHints;
+import pe.rendszerfejlesztes.database.EmFactory;
 import pe.rendszerfejlesztes.database.TicketConnector;
 import pe.rendszerfejlesztes.modell.Discount;
 import pe.rendszerfejlesztes.modell.Sector;

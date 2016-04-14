@@ -1,7 +1,8 @@
-package pe.rendszerfejlesztes.database;
+package pe.rendszerfejlesztes.database.impl;
 
 import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.QueryHints;
+import pe.rendszerfejlesztes.database.EmFactory;
 import pe.rendszerfejlesztes.database.UserConnector;
 import pe.rendszerfejlesztes.modell.User;
 
@@ -22,16 +23,16 @@ public class UserConnectorImpl implements UserConnector {
 
     @Override
     public User login(String email, String password) {
-        Query query = em.createQuery("SELECT user FROM User user WHERE user.email LIKE :email AND user.password LIKE :passwd").setHint(QueryHints.CACHE_USAGE, CacheUsage.DoNotCheckCache);
-        query.setParameter("email", email);
-        query.setParameter("passwd", password);
-        User user = null;
-        try {
-            user = (User) query.getSingleResult();
-        } catch (Exception ex) {
-            // nincs ilyen user
+        List<User> users = listUsers();
+        for(User user : users) {
+            if( user.getEmail().equals( email.trim() ) ) {
+                if( user.getPassword().equals( password.trim() ) ) {
+                    return user;
+                }
+                return null;
+            }
         }
-        return user;
+        return null;
     }
 
     @Override

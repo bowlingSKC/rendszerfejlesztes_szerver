@@ -1,6 +1,7 @@
-package pe.rendszerfejlesztes.database;
+package pe.rendszerfejlesztes.database.impl;
 
 import pe.rendszerfejlesztes.database.DiscountConnector;
+import pe.rendszerfejlesztes.database.EmFactory;
 import pe.rendszerfejlesztes.modell.Discount;
 import pe.rendszerfejlesztes.modell.Ticket;
 

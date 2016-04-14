@@ -12,4 +12,5 @@ public interface EventConnector {
     List<Event> searchEvent(Event event);
     Event getEventBySectorId(Integer id);
 
+    Event createNewEvent(Event event);
 }

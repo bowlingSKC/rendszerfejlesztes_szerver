@@ -3,6 +3,8 @@ package pe.rendszerfejlesztes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import pe.rendszerfejlesztes.database.EventConnector;
+import pe.rendszerfejlesztes.database.PerformerConnector;
+import pe.rendszerfejlesztes.database.impl.PerformerConnectorImpl;
 import pe.rendszerfejlesztes.modell.*;
 import pe.rendszerfejlesztes.services.BookService;
 import pe.rendszerfejlesztes.services.EventService;
@@ -12,6 +14,7 @@ import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import java.lang.annotation.Retention;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +30,7 @@ public class EventEndpoint {
     private EventService eventService = new EventService();
     private LocationService locationService = new LocationService();
     private BookService bookService = new BookService();
+    private PerformerConnector performerConnector = new PerformerConnectorImpl();
 
     @GET
     @Path("locations")
@@ -99,6 +103,34 @@ public class EventEndpoint {
         Ticket obj = gson.fromJson(ticket, Ticket.class);
         Sector sector = bookService.getSectorByTicket(obj);
         return Response.ok(sector).build();
+    }
+
+    @GET
+    @Produces("application/json")
+    @Path("performers")
+    public Response getAllPerformer() {
+        List<Performer> performers = performerConnector.getAllPerformer();
+        GenericEntity<List<Performer>> eventsWrapper = new GenericEntity<List<Performer>>(performers) {};
+        return Response.ok(eventsWrapper).build();
+    }
+
+    @POST
+    @Produces("application/json")
+    @Path("performers")
+    public Response createNewPerformer(String performer) {
+        Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new GsonUTCdateAdapter()).create();
+        Performer obj = gson.fromJson(performer, Performer.class);
+        Performer created = performerConnector.createPerformer(obj);
+        return Response.ok(created).build();
+    }
+
+    @PUT
+    @Produces("application/json")
+    public Response createNewEvent(String json) {
+        Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new GsonUTCdateAdapter()).create();
+        Event obj = gson.fromJson(json, Event.class);
+        eventService.createNewEvent(obj);
+        return Response.ok(obj).build();
     }
 
 }

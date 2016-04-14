@@ -1,15 +1,12 @@
 package pe.rendszerfejlesztes.services;
 
-import pe.rendszerfejlesztes.database.TicetConnectorImpl;
+import pe.rendszerfejlesztes.database.impl.TicetConnectorImpl;
 import pe.rendszerfejlesztes.database.TicketConnector;
 import pe.rendszerfejlesztes.database.UserConnector;
-import pe.rendszerfejlesztes.database.UserConnectorImpl;
+import pe.rendszerfejlesztes.database.impl.UserConnectorImpl;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.inject.Named;
 import java.util.List;
 
 

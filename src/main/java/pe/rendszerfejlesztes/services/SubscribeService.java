@@ -1,18 +1,11 @@
 package pe.rendszerfejlesztes.services;
 
 import pe.rendszerfejlesztes.database.SubscriptionConnector;
-import pe.rendszerfejlesztes.database.SubscriptionConnectorImpl;
+import pe.rendszerfejlesztes.database.impl.SubscriptionConnectorImpl;
 import pe.rendszerfejlesztes.modell.Event;
 import pe.rendszerfejlesztes.modell.Subscription;
 import pe.rendszerfejlesztes.modell.User;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SubscribeService  {

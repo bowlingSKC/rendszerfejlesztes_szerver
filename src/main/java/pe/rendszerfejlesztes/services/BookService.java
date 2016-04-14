@@ -1,14 +1,14 @@
 package pe.rendszerfejlesztes.services;
 
 import pe.rendszerfejlesztes.database.*;
+import pe.rendszerfejlesztes.database.impl.DiscountConnectorImpl;
+import pe.rendszerfejlesztes.database.impl.SectorConnectorImpl;
+import pe.rendszerfejlesztes.database.impl.TicetConnectorImpl;
 import pe.rendszerfejlesztes.modell.Discount;
 import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
 import pe.rendszerfejlesztes.modell.User;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.inject.Named;
 import java.util.List;
 
 public class BookService {

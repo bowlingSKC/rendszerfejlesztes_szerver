@@ -1,20 +1,18 @@
 package pe.rendszerfejlesztes.services;
 
 import pe.rendszerfejlesztes.database.EventConnector;
-import pe.rendszerfejlesztes.database.EventConnectorImpl;
+import pe.rendszerfejlesztes.database.LocationConnector;
+import pe.rendszerfejlesztes.database.PerformerConnector;
+import pe.rendszerfejlesztes.database.impl.EventConnectorImpl;
 import pe.rendszerfejlesztes.database.SectorConnector;
-import pe.rendszerfejlesztes.database.SectorConnectorImpl;
+import pe.rendszerfejlesztes.database.impl.LocationConnectorImpl;
+import pe.rendszerfejlesztes.database.impl.PerformerConnectorImpl;
+import pe.rendszerfejlesztes.database.impl.SectorConnectorImpl;
 import pe.rendszerfejlesztes.modell.Event;
+import pe.rendszerfejlesztes.modell.Location;
+import pe.rendszerfejlesztes.modell.Performer;
 import pe.rendszerfejlesztes.modell.Sector;
-import pe.rendszerfejlesztes.modell.Subscription;
-import pe.rendszerfejlesztes.modell.User;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +20,8 @@ public class EventService {
 
     private EventConnector eventConnector = new EventConnectorImpl();
     private SectorConnector sectorConnector = new SectorConnectorImpl();
+    private PerformerConnector performerConnector = new PerformerConnectorImpl();
+    private LocationConnector locationConnector = new LocationConnectorImpl();
 
     public List<Event> getAllEvents() {
         List<Event> events = eventConnector.getAllEvents();
@@ -48,6 +48,27 @@ public class EventService {
             }
         }
         return null;
+    }
+
+    public Event createNewEvent(Event event) {
+        Performer performer = performerConnector.getPerformerById(event.getPerformer().getId());
+        event.setPerformer(performer);
+
+        Location location = locationConnector.getLocationById(event.getLocation().getId());
+        event.setLocation(location);
+
+        if(event.getLocation().getEvents() == null) {
+            event.getLocation().setEvents(new ArrayList<Event>());
+        }
+        if(event.getPerformer().getEvents() == null) {
+            event.getPerformer().setEvents(new ArrayList<Event>());
+        }
+        event.getPerformer().getEvents().add(event);
+        for(Sector sector : event.getSectorList()) {
+            sector.setEvent(event);
+        }
+        Event created = eventConnector.createNewEvent(event);
+        return created;
     }
 
     /*

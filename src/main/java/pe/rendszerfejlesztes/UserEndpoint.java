@@ -65,6 +65,7 @@ public class UserEndpoint {
     @Produces("application/json")
     @Path("{email}/{pswd}")
     public Response login(@PathParam("email") String email, @PathParam("pswd") String pswd) {
+        System.out.println("felhasznalonev: " + email + ", jelszo: " + pswd);
         User user = userService.login(email, pswd);
         return Response.ok(user).build();
     }

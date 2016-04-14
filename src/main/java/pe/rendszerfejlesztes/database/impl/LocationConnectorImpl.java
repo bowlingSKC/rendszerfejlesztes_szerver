@@ -1,7 +1,8 @@
-package pe.rendszerfejlesztes.database;
+package pe.rendszerfejlesztes.database.impl;
 
 import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.QueryHints;
+import pe.rendszerfejlesztes.database.EmFactory;
 import pe.rendszerfejlesztes.database.LocationConnector;
 import pe.rendszerfejlesztes.modell.Location;
 
@@ -26,5 +27,11 @@ public class LocationConnectorImpl implements LocationConnector {
             return new ArrayList<>();
         }
         return locations;
+    }
+
+    @Override
+    public Location getLocationById(Integer id) {
+        Location location = em.find(Location.class, id);
+        return location;
     }
 }

@@ -1,16 +1,9 @@
 package pe.rendszerfejlesztes.services;
 
 import pe.rendszerfejlesztes.database.LocationConnector;
-import pe.rendszerfejlesztes.database.LocationConnectorImpl;
+import pe.rendszerfejlesztes.database.impl.LocationConnectorImpl;
 import pe.rendszerfejlesztes.modell.Location;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 
 public class LocationService {

@@ -1,13 +1,15 @@
-package pe.rendszerfejlesztes.database;
+package pe.rendszerfejlesztes.database.impl;
 
 
+import pe.rendszerfejlesztes.database.EmFactory;
+import pe.rendszerfejlesztes.database.EventConnector;
+import pe.rendszerfejlesztes.database.SubscriptionConnector;
 import pe.rendszerfejlesztes.modell.Event;
 import pe.rendszerfejlesztes.modell.Subscription;
 import pe.rendszerfejlesztes.modell.User;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;

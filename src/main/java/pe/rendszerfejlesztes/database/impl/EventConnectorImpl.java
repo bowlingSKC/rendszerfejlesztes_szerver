@@ -1,7 +1,8 @@
-package pe.rendszerfejlesztes.database;
+package pe.rendszerfejlesztes.database.impl;
 
 import org.eclipse.persistence.config.CacheUsage;
 import org.eclipse.persistence.config.QueryHints;
+import pe.rendszerfejlesztes.database.EmFactory;
 import pe.rendszerfejlesztes.database.EventConnector;
 import pe.rendszerfejlesztes.modell.Event;
 
@@ -73,5 +74,14 @@ public class EventConnectorImpl implements EventConnector {
         Query query = em.createQuery("SELECT sector FROM Sector sector WHERE sector.event.id = :id").setHint(QueryHints.CACHE_USAGE, CacheUsage.DoNotCheckCache);
         query.setParameter("id", id);
         return (Event) query.getSingleResult();
+    }
+
+    @Override
+    public Event createNewEvent(Event event) {
+        em.getTransaction().begin();
+        em.persist(event);
+        em.flush();
+        em.getTransaction().commit();
+        return event;
     }
 }

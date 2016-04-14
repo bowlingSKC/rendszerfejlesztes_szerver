@@ -12,4 +12,6 @@ public interface SectorConnector {
     List<Sector> getSectorByEventId(Integer id);
 
     Sector getSectorById(Integer id);
+
+    Sector createNewSector(Sector sector);
 }

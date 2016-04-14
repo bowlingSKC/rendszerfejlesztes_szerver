@@ -1,5 +1,7 @@
-package pe.rendszerfejlesztes.database;
+package pe.rendszerfejlesztes.database.impl;
 
+import pe.rendszerfejlesztes.database.EmFactory;
+import pe.rendszerfejlesztes.database.SectorConnector;
 import pe.rendszerfejlesztes.modell.Event;
 import pe.rendszerfejlesztes.modell.Sector;
 import pe.rendszerfejlesztes.modell.Ticket;
@@ -28,6 +30,15 @@ public class SectorConnectorImpl implements SectorConnector {
     @Override
     public Sector getSectorById(Integer id) {
         Sector sector = em.find(Sector.class, id);
+        return sector;
+    }
+
+    @Override
+    public Sector createNewSector(Sector sector) {
+        em.getTransaction().begin();
+        em.persist(sector);
+        em.flush();
+        em.getTransaction().commit();
         return sector;
     }
 

@@ -10,4 +10,5 @@ public interface LocationConnector {
 
     List<Location> getAllLocation();
 
+    Location getLocationById(Integer id);
 }
