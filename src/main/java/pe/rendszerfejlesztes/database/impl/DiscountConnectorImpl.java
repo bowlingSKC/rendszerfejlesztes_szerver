@@ -21,13 +21,16 @@ public class DiscountConnectorImpl implements DiscountConnector{
         if(old != null){
             System.out.println(discount);
             System.out.println(old);
+            em.getTransaction().begin();
             //em.remove(old);
             old.setDiscount(discount);
             System.out.println(old);
             //em.persist(old);
-            em.refresh(old);
-            //em.merge(old);
-            //em.flush();
+            //em.refresh(discount);
+            //em.refresh(old);
+            em.merge(old);
+            em.flush();
+            em.getTransaction().commit();
             return true;
         }
 

@@ -74,7 +74,7 @@ public class BookingEndpoint {
             return Response.serverError().build();
         }
         System.out.println("Sikeres jegy foglalas!");
-        return Response.ok().build();
+        return Response.ok(ticket).build();
     }
 
     @POST

@@ -51,6 +51,9 @@ public class TicetConnectorImpl implements TicketConnector {
 
     @Override
     public void deleteTicket(Ticket ticket) {
+        System.out.println(ticket);
+        em.getTransaction().begin();
+        ticket = em.find(Ticket.class,ticket.getId());
         em.remove(ticket);
 
         User user = em.find(User.class, ticket.getUser().getId());
@@ -59,14 +62,19 @@ public class TicetConnectorImpl implements TicketConnector {
         em.refresh(sector);
 
         em.flush();
+        em.getTransaction().commit();
     }
 
     @Override
     public void setTicketPaid(Ticket ticket) {
+        System.out.println(ticket);
+        em.getTransaction().begin();
         Ticket db = em.find(Ticket.class, ticket.getId());
         db.setPaid(true);
-        em.refresh(db);
+        System.out.println(db);
+        em.merge(db);
         em.flush();
+        em.getTransaction().commit();
     }
 
     @Override

@@ -29,7 +29,9 @@ public class SubscriptionConnectorImpl implements SubscriptionConnector {
             if(e.getId() == id){
                 event = e;
                 Subscription subscription = new Subscription(user,event);
+                em.getTransaction().begin();
                 em.persist(subscription);
+                em.getTransaction().commit();
                 return subscription;
             }
         }
@@ -64,9 +66,49 @@ public class SubscriptionConnectorImpl implements SubscriptionConnector {
 
     @Override
     public Event getSubscriptionByEventId(Integer id) {
-        Query query = em.createQuery("SELECT sub FROM Subscription sub WHERE sub.event.id = :id");
+        /*Query query = em.createQuery("SELECT sub FROM Subscription sub WHERE sub.event.id = :id");
         query.setParameter("id", id);
-        Event result = (Event) query.getSingleResult();
-        return result;
+        Event result = (Event) query.getSingleResult();*/
+
+        List<Event> events =  eventConnector.getAllEvents();
+        List<Subscription> subscriptions = getAllSubscription();
+        for(Subscription s : subscriptions){
+            if(s.getId() == id){
+                for(Event e : events){
+                    if(e.getId() == s.getEvent().getId()){
+                           return e;
+                    }
+                }
+            }
+        }
+        return null;
+        //return result;
+    }
+
+    @Override
+    public boolean unSubscribe(Subscription subscription){
+        try{
+            subscription = em.find(Subscription.class, subscription.getId());
+            em.getTransaction().begin();
+            em.remove(subscription);
+            em.refresh(em.find(User.class,subscription.getUser().getId()));
+            em.flush();
+            em.getTransaction().commit();
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isSubscribed(Event event, Integer id){
+        List<Subscription> subscriptions = getAllSubscription();
+        for(Subscription sub : subscriptions){
+            if(sub.getUser().getId() == id && sub.getEvent().getId() == event.getId()){
+                return true;
+            }
+        }
+        return false;
     }
 }
