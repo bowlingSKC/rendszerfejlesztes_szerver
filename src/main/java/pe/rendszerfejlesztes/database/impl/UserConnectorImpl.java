@@ -67,4 +67,9 @@ public class UserConnectorImpl implements UserConnector {
         }
         return users;
     }
+
+    @Override
+    public User updateUser(User user){
+        return em.find(User.class,user.getId());
+    }
 }

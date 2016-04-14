@@ -12,5 +12,6 @@ public interface UserConnector {
     User login(String email, String password);
     List<User> listUsers();
     List<User> searchUser(User user);
+    User updateUser(User user);
 
 }

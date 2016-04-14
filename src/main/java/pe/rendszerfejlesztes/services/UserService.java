@@ -45,4 +45,8 @@ public class UserService {
         ticketConnector.setTicketPaid(ticket);
         return ticket;
     }
+
+    public User updateUser(User user){
+        return userConnector.updateUser(user);
+    }
 }

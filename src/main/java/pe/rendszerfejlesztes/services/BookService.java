@@ -1,5 +1,6 @@
 package pe.rendszerfejlesztes.services;
 
+import pe.rendszerfejlesztes.SendMail;
 import pe.rendszerfejlesztes.database.*;
 import pe.rendszerfejlesztes.database.impl.DiscountConnectorImpl;
 import pe.rendszerfejlesztes.database.impl.SectorConnectorImpl;
@@ -16,6 +17,8 @@ public class BookService {
     private TicketConnector ticketConnector = new TicetConnectorImpl();
     private DiscountConnector discountConnector = new DiscountConnectorImpl();
     private SectorConnector sectorConnector = new SectorConnectorImpl();
+    private UserService userService = new UserService();
+    private EventService eventService = new EventService();
 
     public List<Ticket> getUserTicket(User user) {
         List<Ticket> tickets = ticketConnector.getTicketsByUserId(user.getId());
@@ -24,9 +27,28 @@ public class BookService {
 
     public Ticket bookTicket(Ticket ticket) {
         if( ticket.getRow() == null|| ticket.getCol() == null ) {
-            return bookNonSeatedTicket(ticket);
+            Ticket booked = bookNonSeatedTicket(ticket);
+            if(booked != null){
+                System.out.println("Sending mail...");
+                booked.setSector(sectorConnector.getSectorById(booked.getSector().getId()));
+                SendMail.send(userService.updateUser(booked.getUser()).getEmail(), "Booking", "You booked: " +
+                        eventService.getEventBySector(booked.getSector()).getName() + " - " +
+                        eventService.getEventBySector(booked.getSector()).getStart() + " - " +
+                        "Sector: " + booked.getSector().getDepth());
+            }
+            return booked;
         } else {
-            return bookSeatedTicket(ticket);
+            Ticket booked = bookSeatedTicket(ticket);
+            if(booked != null){
+                System.out.println("Sending mail...");
+                booked.setSector(sectorConnector.getSectorById(booked.getSector().getId()));
+                SendMail.send(userService.updateUser(booked.getUser()).getEmail(), "Booking", "You booked: " +
+                        eventService.getEventBySector(booked.getSector()).getName() + " - " +
+                        eventService.getEventBySector(booked.getSector()).getStart() + " - " +
+                        "Sector: " + booked.getSector().getDepth() +
+                         " Row: " + booked.getRow() + " Column: " + booked.getCol());
+            }
+            return booked;
         }
     }
 
