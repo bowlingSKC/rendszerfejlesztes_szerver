@@ -18,7 +18,11 @@ public class UserConnectorImpl implements UserConnector {
 
     @Override
     public User createUser(User user) {
-        return null;
+        em.getTransaction().begin();
+        em.persist( user );
+        em.flush();
+        em.getTransaction().commit();
+        return user;
     }
 
     @Override

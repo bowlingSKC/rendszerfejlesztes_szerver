@@ -33,6 +33,7 @@ public class UserEndpoint {
     @Produces("application/json")
     public Response registerUser(User newUser) {
         User created = userService.createUser(newUser);
+        System.out.println("Created: " + created);
         return Response.ok(created).build();
     }
 

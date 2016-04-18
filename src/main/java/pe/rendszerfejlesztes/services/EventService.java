@@ -60,6 +60,7 @@ public class EventService {
         if(event.getLocation().getEvents() == null) {
             event.getLocation().setEvents(new ArrayList<Event>());
         }
+
         if(event.getPerformer().getEvents() == null) {
             event.getPerformer().setEvents(new ArrayList<Event>());
         }
@@ -69,6 +70,16 @@ public class EventService {
         }
         Event created = eventConnector.createNewEvent(event);
         return created;
+    }
+
+    public Performer updatePerfomer(Performer performer) {
+        performerConnector.updatePerfomer(performer);
+        return performer;
+    }
+
+    public Location updateLocation(Location location) {
+        locationConnector.updateLocation(location);
+        return location;
     }
 
     /*

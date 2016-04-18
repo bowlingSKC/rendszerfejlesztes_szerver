@@ -37,4 +37,14 @@ public class PerformerConnectorImpl implements PerformerConnector {
         Performer performer = em.find(Performer.class, id);
         return performer;
     }
+
+    @Override
+    public Performer updatePerfomer(Performer performer) {
+        Performer db = em.find(Performer.class, performer.getId());
+        em.getTransaction().begin();
+        db.setName( performer.getName() );
+        db.setDescription( performer.getDescription() );
+        em.getTransaction().commit();
+        return performer;
+    }
 }

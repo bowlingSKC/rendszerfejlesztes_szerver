@@ -34,4 +34,15 @@ public class LocationConnectorImpl implements LocationConnector {
         Location location = em.find(Location.class, id);
         return location;
     }
+
+    @Override
+    public void updateLocation(Location location) {
+        Location db = em.find(Location.class, location.getId());
+        em.getTransaction().begin();
+        db.setName(location.getName());
+        db.setAddress(location.getAddress());
+        db.setLatitude( location.getLatitude() );
+        db.setLongitude( location.getLongitude() );
+        em.getTransaction().commit();
+    }
 }

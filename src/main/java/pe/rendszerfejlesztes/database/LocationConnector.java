@@ -11,4 +11,6 @@ public interface LocationConnector {
     List<Location> getAllLocation();
 
     Location getLocationById(Integer id);
+
+    void updateLocation(Location location);
 }

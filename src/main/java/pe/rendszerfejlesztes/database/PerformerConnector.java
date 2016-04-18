@@ -10,4 +10,6 @@ public interface PerformerConnector {
     Performer createPerformer(Performer performer);
 
     Performer getPerformerById(Integer id);
+
+    Performer updatePerfomer(Performer performer);
 }

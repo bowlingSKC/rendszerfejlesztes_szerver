@@ -133,4 +133,23 @@ public class EventEndpoint {
         return Response.ok(obj).build();
     }
 
+    @POST
+    @Produces("application/json")
+    @Path("update/performer")
+    public Response updatePerformer(String performer) {
+        Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new GsonUTCdateAdapter()).create();
+        Performer updated = eventService.updatePerfomer( gson.fromJson(performer, Performer.class) );
+        System.out.println("Modositott eloado: " + updated);
+        return Response.ok(updated).build();
+    }
+
+    @POST
+    @Produces("application/json")
+    @Path("update/location")
+    public Response updateLocation(String location) {
+        Gson gson = new GsonBuilder().registerTypeAdapter(Date.class, new GsonUTCdateAdapter()).create();
+        Location updated = eventService.updateLocation( gson.fromJson(location, Location.class) );
+        return Response.ok(updated).build();
+    }
+
 }
